@@ -1,5 +1,5 @@
-export type TUser = {
-  name: string;
+export type TOtp = {
   email: string;
-  password?: string;
+  otp: number;
+  otpFor: "account-activation" | "password-reset" | "resend-otp";
 };

@@ -1,7 +1,7 @@
 import express from "express";
 import validateRequest from "../../middlewares/validateRequest";
-import { validateSignUpWithEmailSchema } from "./auth.validation";
-import { signUpWithEmail } from "./auth.controller";
+import { validateSignUpWithEmailSchema } from "./user.validation";
+import { signUpWithEmail } from "./user.controller";
 
 const router = express.Router();
 
@@ -11,6 +11,6 @@ router.post(
   signUpWithEmail,
 );
 
-const AuthRouters = router;
+const UserRouters = router;
 
-export default AuthRouters;
+export default UserRouters;
