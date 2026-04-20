@@ -9,7 +9,7 @@ const main = async () => {
   try {
     await mongoose.connect(config.DATABASE_URL as string);
 
-    server = app.listen(config.port, () => {
+    server = app.listen(config.PORT, () => {
       console.log(`http://localhost:${config.PORT}`);
     });
   } catch (error) {
