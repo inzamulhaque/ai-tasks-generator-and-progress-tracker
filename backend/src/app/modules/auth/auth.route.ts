@@ -3,9 +3,16 @@ import validateRequest from "../../middlewares/validateRequest";
 import {
   validateChangePasswordSchema,
   validateEmailVerifySchema,
+  validateForgotPasswordSchema,
   validateSigninSchema,
 } from "./auth.validation";
-import { changePassword, signin, verifyEmail } from "./auth.controller";
+import {
+  changePassword,
+  forgotPassword,
+  getMe,
+  signin,
+  verifyEmail,
+} from "./auth.controller";
 import auth from "../../middlewares/auth";
 
 const router = Router();
@@ -23,6 +30,14 @@ router.post(
   auth,
   validateRequest(validateChangePasswordSchema),
   changePassword,
+);
+
+router.get("/me", auth, getMe);
+
+router.post(
+  "/forgot-password",
+  validateRequest(validateForgotPasswordSchema),
+  forgotPassword,
 );
 
 const AuthRouters = router;

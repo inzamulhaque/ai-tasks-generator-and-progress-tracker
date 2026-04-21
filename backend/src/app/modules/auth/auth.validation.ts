@@ -24,3 +24,9 @@ export const validateChangePasswordSchema = z.object({
     newPassword: z.string().min(6).max(128),
   }),
 });
+
+export const validateForgotPasswordSchema = z.object({
+  body: z.object({
+    email: z.templateLiteral([z.string().min(1), "@", z.string().max(64)]),
+  }),
+});
