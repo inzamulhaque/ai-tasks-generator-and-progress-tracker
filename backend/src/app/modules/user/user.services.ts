@@ -6,6 +6,7 @@ import type { TUser } from "./user.interface";
 import User from "./user.model";
 import emailTemplate from "../../utils/emailTemplate";
 import sendEmail from "../../utils/sendEmail";
+import mongoose from "mongoose";
 
 export const signUpWithEmailService = async (payload: TUser) => {
   const existingUser = await User.findOne({ email: payload.email });
@@ -16,7 +17,7 @@ export const signUpWithEmailService = async (payload: TUser) => {
 
   const newOtp = await generateOtp();
 
-  const session = await User.startSession();
+  const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
@@ -43,11 +44,7 @@ export const signUpWithEmailService = async (payload: TUser) => {
       otp: newOtp,
     });
 
-    await sendEmail(
-      payload.email,
-      "Activate Your Account - AI Tasks Generator",
-      emailHTML,
-    );
+    await sendEmail(payload.email, "Activate Your Account", emailHTML);
 
     const userData = (newUser[0] as HydratedDocument<TUser>).toObject();
     delete userData.password;
