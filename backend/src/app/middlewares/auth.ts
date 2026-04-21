@@ -12,7 +12,7 @@ const auth = catchAsync(
     const token = req.headers.authorization;
 
     if (!token) {
-      return new AppError("Unauthorized!", 401);
+      throw new AppError("Unauthorized!", 401);
     }
 
     const decoded = jwtUtils.verifyToken(token);
