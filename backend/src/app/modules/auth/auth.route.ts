@@ -4,6 +4,7 @@ import {
   validateChangePasswordSchema,
   validateEmailVerifySchema,
   validateForgotPasswordSchema,
+  validateOtpValidationSchema,
   validateSigninSchema,
 } from "./auth.validation";
 import {
@@ -12,6 +13,7 @@ import {
   getMe,
   signin,
   verifyEmail,
+  verifyForgotPasswordOtp,
 } from "./auth.controller";
 import auth from "../../middlewares/auth";
 
@@ -38,6 +40,12 @@ router.post(
   "/forgot-password",
   validateRequest(validateForgotPasswordSchema),
   forgotPassword,
+);
+
+router.post(
+  "/verify-otp",
+  validateRequest(validateOtpValidationSchema),
+  verifyForgotPasswordOtp,
 );
 
 const AuthRouters = router;

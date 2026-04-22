@@ -2,7 +2,8 @@ import type { NextFunction, Request, Response } from "express";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
 import { jwtUtils } from "../utils/jwt.js";
-import type { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import { type JwtPayload } from "jsonwebtoken";
 
 declare global {
   namespace Express {
@@ -20,16 +21,22 @@ const auth = catchAsync(
     res: Response,
     next: NextFunction,
   ) => {
-    const token = req.headers.authorization;
+    try {
+      const token = req.headers.authorization;
 
-    if (!token) {
-      throw new AppError("Unauthorized!", 401);
+      if (!token) {
+        throw new AppError("Unauthorized!", 401);
+      }
+
+      const decoded = jwtUtils.verifyToken(token);
+      req.user = decoded as { email: string };
+
+      next();
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new AppError("Token expired! Please login again.", 401);
+      }
     }
-
-    const decoded = jwtUtils.verifyToken(token);
-    req.user = decoded as { email: string };
-
-    next();
   },
 );
 

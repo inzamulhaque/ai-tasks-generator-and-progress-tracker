@@ -6,6 +6,7 @@ import {
   getMeService,
   signinWithEmailService,
   verifyEmailService,
+  verifyForgotPasswordOtpService,
 } from "./auth.services";
 
 export const verifyEmail = catchAsync(async (req, res) => {
@@ -62,6 +63,17 @@ export const forgotPassword = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "OTP sent to email successfully!",
+    data: result,
+  });
+});
+
+export const verifyForgotPasswordOtp = catchAsync(async (req, res) => {
+  const result = await verifyForgotPasswordOtpService(req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "OTP verify successfully!",
     data: result,
   });
 });

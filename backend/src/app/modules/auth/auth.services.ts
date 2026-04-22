@@ -172,3 +172,31 @@ export const forgotPasswordService = async (email: string) => {
     throw new AppError("Failed to process forgot password request!", 500);
   }
 };
+
+export const verifyForgotPasswordOtpService = async (payload: {
+  email: string;
+  otp: number;
+}) => {
+  const userOtp = await Otp.findOne({ email: payload.email });
+  if (!userOtp) {
+    throw new AppError("Otp not found!", 404);
+  }
+
+  const now = new Date().getTime();
+  const createdTime = new Date(userOtp?.createdAt!).getTime();
+
+  const diffInMs = now - createdTime;
+  const fiveMinutesMs = 5 * 60 * 1000;
+
+  if (diffInMs > fiveMinutesMs) {
+    throw new AppError("OTP has expired!", 400);
+  }
+
+  if (userOtp.otp !== payload.otp) {
+    throw new AppError("Invalid OTP!", 400);
+  }
+
+  const token = jwtUtils.generateToken({ email: userOtp.email }, "5m");
+
+  return token;
+};
