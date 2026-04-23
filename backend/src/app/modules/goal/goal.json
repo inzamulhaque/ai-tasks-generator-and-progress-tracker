@@ -1,0 +1,216 @@
+{
+  "name": "7-Day Python Sprint for Agentic AI",
+  "duration": 7,
+  "description": "A 7-day, 3-hours-per-day plan that leverages your existing MERN knowledge. Each day mixes short video/reading chunks, focused hands-on coding, a mini-project that builds on the previous day, and a quick reflection to cement concepts. By the end of Day 7 you will have a runnable Python skeleton for an agent, a clean Git repo, and a clear roadmap for advancing to full-featured agentic AI frameworks.",
+  "finalGoal": "You will finish the week able to write, run, and version-control Python scripts, manipulate data with pandas, make async API calls, and have a working prototype of an AI-agent that you can iterate on with more advanced libraries later.",
+  "dailyTasks": [
+    {
+      "day": 1,
+      "motivation": "Set the foundation – you already know programming concepts from MERN, so focus on Python syntax and the REPL.",
+      "tasks": [
+        {
+          "title": "Video Overview",
+          "description": "Watch a 30-minute intro video (Corey Schafer – Python for Beginners or freeCodeCamp – Python Full Course 2023)."
+        },
+        {
+          "title": "Reading",
+          "description": "Read the first two chapters of Automate the Boring Stuff with Python (Installation, Python interpreter, basic data types)."
+        },
+        {
+          "title": "Setup",
+          "description": "Hands-on: Install Python 3.11 (or latest) + VS Code + the Python extension. Open a terminal and run `python -i` to explore the REPL."
+        },
+        {
+          "title": "First script",
+          "description": "Practice: Write a script `hello.py` that prints “Hello, AI Agent!” and run it."
+        },
+        {
+          "title": "Reflection",
+          "description": "Reflection: Write 3 bullet points on how Python’s syntax differs from JavaScript."
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "motivation": "Control flow & collections – the building blocks for any AI-agent logic.",
+      "tasks": [
+        {
+          "title": "Control Flow Video",
+          "description": "Watch 20 min on `if/elif/else`, loops, and list comprehensions (Corey Schafer)."
+        },
+        {
+          "title": "Reading",
+          "description": "Read Automate the Boring Stuff – Chapter 2 (Strings) & Chapter 3 (Lists, Dictionaries, Tuples)."
+        },
+        {
+          "title": "Practice",
+          "description": "Exercise: Solve 5 small problems from exercism.io (python track) or LeetCode Easy – e.g., reverse a string, sum of list, count vowels."
+        },
+        {
+          "title": "Mini-project",
+          "description": "Build a command-line “To-Do” list that stores items in a JSON file. Use `input()`, `if`, `for`, and list/dict ops."
+        },
+        {
+          "title": "Reflection",
+          "description": "Reflection: Note any syntax quirks that felt natural vs. those that felt foreign."
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "motivation": "Functions, modules & virtual environments – essential for clean AI-agent code.",
+      "tasks": [
+        {
+          "title": "Functions Video",
+          "description": "Watch 15 min on defining functions, default arguments, `*args/**kwargs`."
+        },
+        {
+          "title": "Reading",
+          "description": "Read Python Crash Course – Chapter 8 (Functions) & Chapter 9 (Classes – just a skim)."
+        },
+        {
+          "title": "Practice",
+          "description": "Exercise: Implement `factorial`, `fibonacci`, and a higher-order function `apply_twice(func, value)`."
+        },
+        {
+          "title": "Environment Setup",
+          "description": "Create a virtual environment: `python -m venv venv && source venv/bin/activate`. Install `requests` and `pydantic`."
+        },
+        {
+          "title": "Mini-project",
+          "description": "Write a module `weather.py` that fetches current weather from a free API (e.g., OpenWeatherMap) and exposes a function `get_weather(city)`. Keep the API key in a `.env` file and load it with `python-dotenv`."
+        },
+        {
+          "title": "Reflection",
+          "description": "Reflection: Write a short note on why virtual environments matter for AI projects."
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "motivation": "Data handling – pandas & JSON, the formats most AI agents consume.",
+      "tasks": [
+        {
+          "title": "Pandas Video",
+          "description": "Watch 20 min “Pandas Basics” (DataCamp free intro or Corey Schafer)."
+        },
+        {
+          "title": "Reading",
+          "description": "Read the first 3 chapters of Python for Data Analysis (Importing data, Series, DataFrames)."
+        },
+        {
+          "title": "Practice",
+          "description": "Exercise: Load a CSV of sample tweets, clean whitespace, filter rows where `lang == 'en'`, and save the result to `clean.csv`."
+        },
+        {
+          "title": "Mini-project",
+          "description": "Write a script `agent_data.py` that reads a JSON knowledge-base, converts it to a DataFrame, and prints the top-5 most common keys."
+        },
+        {
+          "title": "Reflection",
+          "description": "Reflection: Compare pandas DataFrames to JavaScript arrays of objects – note the advantages for AI pipelines."
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "motivation": "Intro to HTTP & async – how agents talk to LLM APIs.",
+      "tasks": [
+        {
+          "title": "HTTP Video",
+          "description": "Watch 15 min on `requests` (synchronous) and 15 min on `httpx`/`aiohttp` (asynchronous)."
+        },
+        {
+          "title": "Reading",
+          "description": "Read OpenAI’s quickstart Python guide (or any free LLM API doc)."
+        },
+        {
+          "title": "Practice",
+          "description": "Exercise: Write a synchronous function `call_openai(prompt)` that posts to the API and returns the response text (use a dummy endpoint if you lack a key)."
+        },
+        {
+          "title": "Practice Async",
+          "description": "Exercise: Convert the above to async using `httpx.AsyncClient` and `await`."
+        },
+        {
+          "title": "Mini-project",
+          "description": "Build a tiny “agent” script that reads a user query, sends it to the LLM, and prints the answer. Add simple caching (store last 5 prompts/responses in a JSON file)."
+        },
+        {
+          "title": "Reflection",
+          "description": "Reflection: List three ways async improves an AI-agent’s responsiveness."
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "motivation": "Putting it together – a functional agent skeleton.",
+      "tasks": [
+        {
+          "title": "Design Video",
+          "description": "Watch 10 min on basic OOP design for agents (class with `run`, `think`, `act` methods)."
+        },
+        {
+          "title": "Reading",
+          "description": "Read the “Agentic AI” section of LangChain docs (focus on the Python quick-start)."
+        },
+        {
+          "title": "Skeleton Code",
+          "description": "Skeleton: Create `agent.py` with a class `SimpleAgent` that loads a knowledge-base (CSV/JSON), has a `plan(query)` method that calls the LLM, and an `execute(plan)` stub."
+        },
+        {
+          "title": "Integration",
+          "description": "Integrate components built in previous days – use pandas for data, async HTTP for LLM calls, and environment variables for keys."
+        },
+        {
+          "title": "Test",
+          "description": "Test run: Ask the agent “What are the top 3 JavaScript frameworks?” and verify it returns a sensible answer."
+        },
+        {
+          "title": "Reflection",
+          "description": "Reflection: Write a 150-word description of how each Python feature you learned contributes to an agent pipeline."
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "motivation": "Polish, version control, and next-step roadmap.",
+      "tasks": [
+        {
+          "title": "Git Video",
+          "description": "Watch 10 min on Git basics for Python projects (branching, .gitignore, requirements.txt)."
+        },
+        {
+          "title": "Version Control",
+          "description": "Create a Git repo for the week’s code, commit each day’s work, write a concise README that explains how to run the agent."
+        },
+        {
+          "title": "Dependency List",
+          "description": "Add a `requirements.txt` (`pip freeze > requirements.txt`)."
+        },
+        {
+          "title": "Linting",
+          "description": "Run a code-quality check: install `flake8` and fix any style warnings."
+        },
+        {
+          "title": "Roadmap",
+          "description": "Future-planning: Draft a 5-step learning path for deeper AI-agent work (e.g., LangChain, Prompt Engineering, Retrieval-Augmented Generation, Dockerizing, Deploying to AWS/GCP)."
+        },
+        {
+          "title": "Share",
+          "description": "Celebration: Write a short blog post or LinkedIn update summarizing “My 7-day Python sprint for AI agents”."
+        }
+      ]
+    }
+  ],
+  "finalChallenges": [
+    {
+      "title": "Hybrid Retrieval Agent",
+      "description": "Extend `SimpleAgent` to accept a CSV of FAQs and, when queried, first try to answer from the CSV before falling back to the LLM."
+    },
+    {
+      "title": "Containerize",
+      "description": "Dockerize the agent (write a Dockerfile, build an image, run `docker run`)."
+    }
+  ]
+}

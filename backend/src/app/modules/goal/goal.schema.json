@@ -1,0 +1,79 @@
+{
+  "type": "object",
+  "required": [
+    "name",
+    "description",
+    "finalGoal",
+    "dailyTasks",
+    "finalChallenges"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Goal Name (english/bangla string)"
+    },
+    "description": {
+      "type": "string",
+      "description": "english/bangla string"
+    },
+
+    "finalGoal": {
+      "type": "string",
+      "description": "english/bangla string"
+    },
+    "dailyTasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["day", "tasks", "motivation"],
+        "properties": {
+          "day": {
+            "type": "number"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["title", "description"],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Task title (english/bangla string)"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Task description (english/bangla string)"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "motivation": {
+            "type": "string",
+            "description": "english/bangla string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "finalChallenges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "description"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Challenge title (english/bangla string)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Challenge description (english/bangla string)"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

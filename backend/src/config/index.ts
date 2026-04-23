@@ -13,6 +13,7 @@ const config = {
     ADDRESS: process.env.EMAIL,
     PASSWORD: process.env.EMAIL_PASS,
   },
+  OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
 };
 
 export default config;

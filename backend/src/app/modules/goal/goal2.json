@@ -1,0 +1,172 @@
+{
+  "dailyTasks": [
+    {
+      "day": 1,
+      "motivation": "Kick‑off – why Python matters for AI agents and how it fits with your MERN background",
+      "tasks": [
+        {
+          "description": "Set up the environment",
+          "title": "Install Python 3.11, VS Code (or PyCharm), and Git. Verify with `python --version` and `pip --version`. Add the VS Code Python extension."
+        },
+        {
+          "description": "Learn the fundamentals of the language syntax",
+          "title": "Read & code along – “Python Crash Course – Chapter 1‑3” (free on automatetheboringstuff.com) or the first three sections of the official Python tutorial (docs.python.org/3/tutorial/)."
+        },
+        {
+          "description": "Write your first scripts",
+          "title": "Exercise: a) Print “Hello, Agent!” b) Simple calculator (add, subtract, multiply, divide) using `input()` and `float()`."
+        },
+        {
+          "description": "Reflect & plan",
+          "title": "Create a one‑page mind‑map of today’s concepts (variables, data types, basic I/O, control flow)."
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "motivation": "From scripts to reusable code – functions and modules",
+      "tasks": [
+        {
+          "description": "Watch a short video on functions (Corey Schafer – “Python Functions”)",
+          "title": "Video (15 min) + notes"
+        },
+        {
+          "description": "Read & practice: Functions, arguments, return values, default parameters, `*args`/`**kwargs` (Python Docs – Defining Functions)",
+          "title": "Write 3 functions: a) factorial, b) palindrome checker, c) temperature converter"
+        },
+        {
+          "description": "Modules & packages",
+          "title": "Create a folder `utils/` with `__init__.py`. Put the three functions there and import them in a new script `main.py`. Run the script."
+        },
+        {
+          "description": "Mini‑project – CLI todo‑list",
+          "title": "Using only `input()` and the functions you just wrote, build a simple command‑line todo app (add, list, remove)."
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "motivation": "Data structures – the building blocks for AI agents",
+      "tasks": [
+        {
+          "description": "Read: Lists, tuples, sets, dicts (Python Docs – Data Structures)",
+          "title": "Take note of mutability, common methods, and when to use each."
+        },
+        {
+          "description": "Hands‑on: Manipulate each structure",
+          "title": "Write a script that: a) reads a CSV line into a list, b) removes duplicates with a set, c) counts word frequencies with a dict, d) stores a fixed‑size configuration in a tuple."
+        },
+        {
+          "description": "Comprehensions & built‑ins",
+          "title": "Practice list/dict/set comprehensions and functions like `map`, `filter`, `sorted`."
+        },
+        {
+          "description": "Mini‑project – Word‑frequency analyzer",
+          "title": "Read a text file, compute the 10 most common words, and output JSON. Use `collections.Counter` as a bonus."
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "motivation": "Control flow, error handling & testing – write robust agent code",
+      "tasks": [
+        {
+          "description": "Read: `if/elif/else`, loops, `break/continue`, `while‑else` (Python Docs – Control Flow)",
+          "title": "Write a script that simulates a simple state‑machine (e.g., traffic‑light controller)."
+        },
+        {
+          "description": "Exceptions",
+          "title": "Study `try/except/else/finally`. Write a wrapper function that safely reads a file and logs errors to `stderr`."
+        },
+        {
+          "description": "Testing basics",
+          "title": "Install `pytest` (`pip install pytest`). Write unit tests for the three functions from Day 2 (factorial, palindrome, converter). Run `pytest -q`."
+        },
+        {
+          "description": "Mini‑project – Robust CLI calculator",
+          "title": "Expand the Day 1 calculator: add input validation, custom exceptions, and unit tests. Keep the code in a package `calc/`. "
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "motivation": "Getting data – HTTP, JSON, and basic web‑scraping (your MERN experience will help)",
+      "tasks": [
+        {
+          "description": "Read: `requests` library basics (official docs) and JSON handling (`json` module).",
+          "title": "Write a script that calls the OpenWeatherMap API (free tier) and prints current temperature for a city you choose."
+        },
+        {
+          "description": "Intro to web‑scraping with `BeautifulSoup`",
+          "title": "Parse a simple static page (e.g., Wikipedia’s “Python (programming language)” page) and extract the first paragraph."
+        },
+        {
+          "description": "API wrapper mini‑project",
+          "title": "Create a small Python package `weather_agent/` with a function `get_weather(city:str) -> dict`. Include error handling and a docstring."
+        },
+        {
+          "description": "Reflection",
+          "title": "Add a `README.md` describing how to install (`pip install -r requirements.txt`) and use the package."
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "motivation": "First taste of AI – using a pre‑built language model via an API",
+      "tasks": [
+        {
+          "description": "Sign up for OpenAI’s free‑tier API (or use HuggingFace Inference API).",
+          "title": "Store the API key in an `.env` file and load it with `python-dotenv`."
+        },
+        {
+          "description": "Read: Making POST requests with JSON payloads (OpenAI API quick‑start).",
+          "title": "Write a function `ask(prompt:str) -> str` that sends the prompt to `gpt‑3.5‑turbo` and returns the reply."
+        },
+        {
+          "description": "Safety & rate‑limit handling",
+          "title": "Wrap the call in a `try/except` block; implement exponential back‑off if you hit a rate limit."
+        },
+        {
+          "description": "Mini‑project – “Agentic Scheduler”",
+          "title": "Combine everything:  \n1. Prompt the model: *“Give me three tasks I should do today to improve my Python skills.”*  \n2. Parse the JSON‑like response into a Python list.  \n3. Save the list to a local `tasks.json`.  \n4. Provide a CLI to mark tasks as done (update the JSON)."
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "motivation": "Consolidate, showcase, and plan next steps",
+      "tasks": [
+        {
+          "description": "Polish the “Agentic Scheduler” project",
+          "title": "Add type hints, a `setup.py` (or `pyproject.toml`), and a `requirements.txt`. Write docstrings and a short usage guide."
+        },
+        {
+          "description": "Version control & portfolio",
+          "title": "Create a GitHub repo, write a concise `README.md` with screenshots, and push the code. Add the repo to your portfolio site (the same way you showcase MERN projects)."
+        },
+        {
+          "description": "Learning audit",
+          "title": "Complete a checklist:  \n- Variables, types, control flow ✅  \n- Functions & modules ✅  \n- Data structures ✅  \n- Exceptions & testing ✅  \n- HTTP/JSON ✅  \n- Simple LLM call ✅  \nIdentify any gaps and note resources for deeper study (e.g., *Automate the Boring Stuff*, *Python Crash Course*, *Effective Python*)."
+        },
+        {
+          "description": "Next‑level roadmap (2‑week sprint)",
+          "title": "\n1️⃣ Week 8‑9 – Pandas & NumPy (data manipulation).  \n2️⃣ Week 10 – Intro to machine‑learning with scikit‑learn.  \n3️⃣ Week 11 – Building a custom LangChain agent.  \n4️⃣ Week 12 – Deploying the agent on Docker/Heroku and connecting it to a MERN front‑end.\nWrite these goals in a Notion page or Google Doc and set weekly review reminders."
+        }
+      ]
+    }
+  ],
+  "description": "A 7‑day, 3‑hours‑per‑day learning‑by‑doing plan that leverages your existing MERN skills and delivers a tangible Python‑based AI‑agent prototype by the end of the week. Each day mixes short theory, hands‑on coding, a mini‑project, and a brief reflection so you build confidence quickly and have concrete portfolio pieces ready to show.",
+  "duration": 21,
+  "finalChallenges": [
+    {
+      "description": "Deploy the \"Agentic Scheduler\" to a free cloud platform (Render, Railway, or Fly.io). Use a `Procfile` and expose a simple HTTP endpoint that returns the current task list as JSON.",
+      "title": "Deployment Sprint"
+    },
+    {
+      "description": "Integrate the Python micro‑service with a tiny React front‑end (you already know MERN). The front‑end should call the `/tasks` endpoint, display tasks, and allow marking them complete via a POST request to the Python API.",
+      "title": "Full‑Stack Fusion"
+    }
+  ],
+  "finalGoal": "By Day 7 you will be able to write clean Python code, consume web APIs, handle errors, test your functions, and build a minimal AI‑augmented agent that you can showcase alongside your MERN portfolio.",
+  "name": "7‑Day Python Boot‑Camp for Agentic AI (3 h/day)"
+}
