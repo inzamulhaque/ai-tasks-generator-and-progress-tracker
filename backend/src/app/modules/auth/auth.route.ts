@@ -5,12 +5,14 @@ import {
   validateEmailVerifySchema,
   validateForgotPasswordSchema,
   validateOtpValidationSchema,
+  validateResetPasswordSchema,
   validateSigninSchema,
 } from "./auth.validation";
 import {
   changePassword,
   forgotPassword,
   getMe,
+  resetPassword,
   signin,
   verifyEmail,
   verifyForgotPasswordOtp,
@@ -46,6 +48,13 @@ router.post(
   "/verify-otp",
   validateRequest(validateOtpValidationSchema),
   verifyForgotPasswordOtp,
+);
+
+router.patch(
+  "/reset-password",
+  auth,
+  validateRequest(validateResetPasswordSchema),
+  resetPassword,
 );
 
 const AuthRouters = router;

@@ -200,3 +200,52 @@ export const verifyForgotPasswordOtpService = async (payload: {
 
   return token;
 };
+
+export const resetPasswordService = async (email: string, password: string) => {
+  const user = await User.findOne({
+    email,
+  });
+  if (!user) {
+    throw new AppError("User not found!", 404);
+  }
+
+  const hashedNewPassword = await bcrypt.hash(password, 12);
+
+  const session = await mongoose.startSession();
+  try {
+    await session.startTransaction();
+
+    await User.findOneAndUpdate(
+      {
+        email,
+      },
+      {
+        $set: {
+          password: hashedNewPassword,
+        },
+      },
+      { session },
+    );
+
+    await Otp.findOneAndDelete(
+      {
+        email,
+      },
+      {
+        session,
+      },
+    );
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return {
+      message: "Password reset successfully!",
+    };
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.error("Error in reset password service:", error);
+    throw new AppError("Failed to process reset password request!", 500);
+  }
+};

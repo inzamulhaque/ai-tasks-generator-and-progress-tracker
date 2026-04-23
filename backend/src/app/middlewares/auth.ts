@@ -21,13 +21,13 @@ const auth = catchAsync(
     res: Response,
     next: NextFunction,
   ) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+      throw new AppError("Unauthorized!", 401);
+    }
+
     try {
-      const token = req.headers.authorization;
-
-      if (!token) {
-        throw new AppError("Unauthorized!", 401);
-      }
-
       const decoded = jwtUtils.verifyToken(token);
       req.user = decoded as { email: string };
 

@@ -38,3 +38,9 @@ export const validateOtpValidationSchema = z.object({
     otp: z.number().min(10000).max(99999),
   }),
 });
+
+export const validateResetPasswordSchema = z.object({
+  body: z.object({
+    password: z.string().min(6).max(128),
+  }),
+});

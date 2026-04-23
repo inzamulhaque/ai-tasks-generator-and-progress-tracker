@@ -4,6 +4,7 @@ import {
   changePasswordService,
   forgotPasswordService,
   getMeService,
+  resetPasswordService,
   signinWithEmailService,
   verifyEmailService,
   verifyForgotPasswordOtpService,
@@ -74,6 +75,19 @@ export const verifyForgotPasswordOtp = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "OTP verify successfully!",
+    data: result,
+  });
+});
+
+export const resetPassword = catchAsync(async (req, res) => {
+  const { email } = req.user!;
+  const { password } = req.body;
+  const result = await resetPasswordService(email, password);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Password reset successfully!",
     data: result,
   });
 });
