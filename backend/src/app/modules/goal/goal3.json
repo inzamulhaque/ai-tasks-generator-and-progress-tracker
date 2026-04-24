@@ -1,0 +1,155 @@
+{
+  "dailyTasks": [
+    {
+      "day": 1,
+      "motivation": "পাইথন‑এর মৌলিক ধারণা শিখে শুরু করুন",
+      "tasks": [
+        {
+          "description": "ইনস্টলেশন ও এনভায়রনমেন্ট সেট‑আপ (Python, VS Code, virtualenv)",
+          "title": "ইনস্টলেশন ও সেট‑আপ"
+        },
+        {
+          "description": "Python‑এর সিনট্যাক্স, ভেরিয়েবল, ডেটা টাইপ (int, float, str, bool) ও প্রিন্ট স্টেটমেন্ট",
+          "title": "বেসিক সিনট্যাক্স ও ডেটা টাইপ"
+        },
+        {
+          "description": "অনলাইন টিউটোরিয়াল (Codecademy/FreeCodeCamp) – ‘Python Basics’ প্রথম ১.৫ ঘণ্টা সম্পন্ন করুন",
+          "title": "ইন্টারেক্টিভ ব্যায়াম"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "motivation": "কন্ট্রোল ফ্লো ও লুপে দক্ষতা অর্জন",
+      "tasks": [
+        {
+          "description": "If‑else, elif, টার্নারি এক্সপ্রেশন",
+          "title": "কন্ডিশনাল স্টেটমেন্ট"
+        },
+        {
+          "description": "For লুপ, while লুপ, break/continue, range() ব্যবহার",
+          "title": "লুপিং"
+        },
+        {
+          "description": "চ্যালেঞ্জ: ১০টি বিভিন্ন প্যাটার্ন প্রিন্ট করা (ফিবোনাচি, পিরামিড, স্টার প্যাটার্ন ইত্যাদি)",
+          "title": "প্র্যাকটিস এক্সারসাইজ"
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "motivation": "ডেটা স্ট্রাকচার ও ফাংশন",
+      "tasks": [
+        {
+          "description": "List, Tuple, Set, Dictionary এর মৌলিক অপারেশন (add, remove, slice, comprehension)",
+          "title": "ডেটা স্ট্রাকচার"
+        },
+        {
+          "description": "ফাংশন ডিফাইন, প্যারামিটার (positional, keyword, *args, **kwargs), রিটার্ন ভ্যালু, ল্যাম্বডা",
+          "title": "ফাংশন"
+        },
+        {
+          "description": "মিনি‑প্রজেক্ট: একটি টু‑ডু লিস্ট CLI অ্যাপ (CRUD অপারেশন) তৈরি করুন",
+          "title": "মিনি‑প্রজেক্ট ১"
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "motivation": "ফাইল হ্যান্ডলিং ও মডিউল/প্যাকেজ",
+      "tasks": [
+        {
+          "description": "File I/O (open, read, write, with‑statement, CSV, JSON)",
+          "title": "ফাইল অপারেশন"
+        },
+        {
+          "description": "Built‑in মডিউল (os, sys, datetime, random) ব্যবহার",
+          "title": "বিল্ট‑ইন মডিউল"
+        },
+        {
+          "description": "কাস্টম মডিউল ও প্যাকেজ তৈরি (একটি utils প্যাকেজ তৈরি করে import করুন)",
+          "title": "মডিউল ও প্যাকেজ"
+        },
+        {
+          "description": "মিনি‑প্রজেক্ট ১‑এর ফিচারকে ফাইল‑বেসড স্টোরেজে রিফ্যাক্টর করুন",
+          "title": "মিনি‑প্রজেক্ট আপডেট"
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "motivation": "OOP (অবজেক্ট‑ওরিয়েন্টেড প্রোগ্রামিং) ও ডেকোরেটর",
+      "tasks": [
+        {
+          "description": "Class, Object, __init__, self, ইনহেরিটেন্স, পলিমরফিজম, মেথড ওভাররাইড",
+          "title": "ক্লাস ও ইনহেরিটেন্স"
+        },
+        {
+          "description": "ডেকোরেটর (function & class based), context manager (with‑statement) বোঝা",
+          "title": "ডেকোরেটর ও কনটেক্সট ম্যানেজার"
+        },
+        {
+          "description": "মিনি‑প্রজেক্ট ২: একটি সহজ ChatBot ক্লাস লিখুন (সেট‑আপ, রেসপন্স টেমপ্লেট, লগিং)",
+          "title": "মিনি‑প্রজেক্ট ২"
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "motivation": "বাহ্যিক লাইব্রেরি ও AI‑এর প্রথম ধাপ",
+      "tasks": [
+        {
+          "description": "pip & virtualenv ব্যবহার করে প্যাকেজ ইনস্টল (numpy, pandas, scikit‑learn, transformers‑lite)",
+          "title": "প্যাকেজ ম্যানেজমেন্ট"
+        },
+        {
+          "description": "NumPy দিয়ে অ্যারে অপারেশন ও মৌলিক গণনা (reshape, slicing, broadcasting)",
+          "title": "NumPy পরিচিতি"
+        },
+        {
+          "description": "Pandas দিয়ে ডেটা লোড, ক্লিনিং ও সিম্পল বিশ্লেষণ (DataFrame, read_csv, groupby)",
+          "title": "Pandas পরিচিতি"
+        },
+        {
+          "description": "Mini‑project ৩: “Agentic‑AI‑Prompt‑Generator” – ব্যবহারকারীকে টেক্সট ইনপুট দিতে হবে, NLP লাইব্রেরি (যেমন HuggingFace’s `transformers`‑এর ছোট মডেল) ব্যবহার করে র‌্যান্ডম প্রম্পট জেনারেট করুন।",
+          "title": "মিনি‑প্রজেক্ট ৩"
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "motivation": "রিভিউ, ডিপ্লয়মেন্ট ও পরবর্তী গাইডলাইন",
+      "tasks": [
+        {
+          "description": "সপ্তাহের সব কোড রিভিউ – PEP8 (flake8) চালান, ডকস্ট্রিং যোগ করুন",
+          "title": "কোড রিফ্যাক্টরিং"
+        },
+        {
+          "description": "প্রোজেক্টগুলোকে GitHub‑এ পুশ করুন, README লিখুন (ইনস্টলেশন, ব্যবহার গাইড)",
+          "title": "ভার্সন কন্ট্রোল"
+        },
+        {
+          "description": "Python‑এ Virtual Environment, Docker (একটি ছোট Dockerfile লিখে প্রোজেক্ট রান করুন)",
+          "title": "ডিপ্লয়মেন্ট"
+        },
+        {
+          "description": "পরবর্তী স্টেপ: Flask/FastAPI‑তে API তৈরি, LangChain/Auto‑GPT বেসিক, এবং MERN‑এর সাথে Python মাইক্রোসার্ভিস ইন্টিগ্রেশন। ১‑২ সপ্তাহের রোডম্যাপ লিখে নিন।",
+          "title": "ভবিষ্যৎ পরিকল্পনা"
+        }
+      ]
+    }
+  ],
+  "description": "এই পরিকল্পনা আপনার প্রতিদিন ৩ ঘণ্টার সীমা মাথায় রেখে সাজানো হয়েছে। প্রতিটি দিন **কনসেপ্ট → হ্যান্ড‑অন → মিনি‑প্রজেক্ট** এই সাইকেল অনুসরণ করে, যাতে তাত্ক্ষণিক প্রয়োগের মাধ্যমে জ্ঞান গড়ে ওঠে। আপনি MERN স্ট্যাক ডেভেলপার হওয়ায়, শেষের দিকে Python‑কে সার্ভিস‑অরিয়েন্টেড (API) বা AI‑এজেন্ট হিসেবে ব্যবহার করা সহজ হবে।",
+  "finalChallenges": [
+    {
+      "description": "একটি Flask API লিখুন যা আপনার ‘Agentic‑AI‑Prompt‑Generator’ কে সার্ভিস হিসেবে এক্সপোজ করবে, এবং React (বা Next.js) ফ্রন্ট‑এন্ড থেকে কল করুন।",
+      "title": "MERN‑Python ইন্টিগ্রেশন"
+    },
+    {
+      "description": "প্রতিটি মিনি‑প্রজেক্টের জন্য ইউনিট টেস্ট (pytest) লিখে কোড কভারেজ ৮০%‑এর উপরে রাখুন।",
+      "title": "টেস্ট‑ড্রিভেন ডেভেলপমেন্ট"
+    }
+  ],
+  "finalGoal": "বেসিক Python শিখে AI‑এর জন্য প্রোটোটাইপ তৈরি করা এবং MERN স্ট্যাকের সঙ্গে হালকা মাইক্রোসার্ভিস ইন্টিগ্রেশন করা।",
+  "name": "Python 7‑Day Sprint Plan"
+}

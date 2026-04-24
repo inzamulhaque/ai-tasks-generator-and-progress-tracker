@@ -1,5 +1,10 @@
+import mongoose from "mongoose";
 import openAI from "../../../config/openai.config";
 import goalSchema from "./goal.schema.json";
+import AppError from "../../utils/AppError";
+import User from "../user/user.model";
+import { DailyTask, FinalChallenge, Goal } from "./goal.model";
+import type { TDailyTask, TFinalChallenge } from "./goal.interface";
 
 export const createGoalService = async (
   email: string,
@@ -9,17 +14,33 @@ export const createGoalService = async (
   goalDescription: string,
   language: string,
 ) => {
-  const propmt = `
-    User wants to ${goalName} within ${goalDuration} days. 
-    create a structured learning/execution plan.
+  const user = await User.findOne({
+    email,
+  });
 
-    time per day : ${timePerDay} hours
-    short description: ${goalDescription}
-    language: ${language}
+  if (!user) {
+    throw new AppError("User Not Found!", 404);
+  }
+
+  const propmt = `
+    You are a goal planning assistant. Respond ONLY with a valid JSON object.
+    No markdown, no explanation, no code blocks. Start with { and end with }.
+
+    GOAL DETAILS:
+      - Goal: ${goalName}
+      - Duration: ${goalDuration} days
+      - Time per day: ${timePerDay} hours
+      - Description: ${goalDescription}
+
+    LANGUAGE RULE:
+      - All JSON keys must be in English (exactly as shown below)
+      - All text values must be written in ${language === "bangla" ? "Bangla (বাংলা)" : "English"}
+
+    Return complete JSON in a single response. Do not stream or split.
     `;
 
   const aiResponse = await openAI.chat.completions.create({
-    model: "openai/gpt-oss-120b:free",
+    model: "meta-llama/llama-3.3-70b-instruct:free",
     messages: [
       {
         role: "system",
@@ -35,6 +56,8 @@ export const createGoalService = async (
 
     temperature: 0.7,
 
+    stream: false,
+
     response_format: {
       type: "json_schema",
       json_schema: {
@@ -45,6 +68,78 @@ export const createGoalService = async (
   });
 
   const content = aiResponse.choices[0]!.message.content;
-  const jsonMatch = content!.match(/\{[\s\S]*\}/);
-  return JSON.parse(jsonMatch as unknown as string);
+  // console.log(content);
+
+  // return content;
+
+  // const jsonMatch = content!.match(/\{[\s\S]*\}/);
+
+  let goal;
+
+  try {
+    goal = JSON.parse(content!);
+  } catch (err) {
+    console.error("Invalid JSON from AI:", content);
+    throw new AppError("AI response invalid!", 500);
+  }
+
+  if (!goal?.dailyTasks || !Array.isArray(goal.dailyTasks)) {
+    throw new AppError("AI dailyTasks missing!", 500);
+  }
+
+  if (!goal?.finalChallenges || !Array.isArray(goal.finalChallenges)) {
+    throw new AppError("AI finalChallenges missing!", 500);
+  }
+
+  // return goal;
+
+  const session = await mongoose.startSession();
+
+  try {
+    await session.startTransaction();
+    const createdGoal = await Goal.create(
+      [
+        {
+          userID: user!._id,
+          name: goal.name,
+          description: goal.description,
+          duration: goalDuration,
+          timePerDay,
+          finalGoal: goal.finalGoal,
+        },
+      ],
+      {
+        session,
+      },
+    );
+
+    const goalID = createdGoal[0]!._id;
+
+    const dailyTask: TDailyTask[] = goal.dailyTasks.map(
+      (DT: Omit<TDailyTask, "goalID">) => ({
+        goalID,
+        ...DT,
+      }),
+    );
+
+    await DailyTask.create(dailyTask, { session });
+
+    const finalChallenges: TFinalChallenge[] = goal.finalChallenges.map(
+      (FC: Omit<TFinalChallenge, "goalID">) => ({
+        goalID,
+        ...FC,
+      }),
+    );
+
+    await FinalChallenge.create(finalChallenges, { session });
+    await session.commitTransaction();
+    await session.endSession();
+
+    return createdGoal;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.error(error);
+    throw new AppError("Goal not created!", 500);
+  }
 };

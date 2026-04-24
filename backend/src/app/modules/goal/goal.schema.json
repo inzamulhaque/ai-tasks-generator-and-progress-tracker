@@ -10,65 +10,69 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Goal Name (english/bangla string)"
+      "maxLength": 75
     },
     "description": {
       "type": "string",
-      "description": "english/bangla string"
+      "maxLength": 250
+    },
+    "finalGoal": {
+      "type": "string"
     },
 
-    "finalGoal": {
-      "type": "string",
-      "description": "english/bangla string"
-    },
     "dailyTasks": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "required": ["day", "tasks", "motivation"],
         "properties": {
           "day": {
-            "type": "number"
+            "type": "number",
+            "minimum": 1
           },
+
           "tasks": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
               "required": ["title", "description"],
               "properties": {
                 "title": {
-                  "type": "string",
-                  "description": "Task title (english/bangla string)"
+                  "type": "string"
                 },
                 "description": {
                   "type": "string",
-                  "description": "Task description (english/bangla string)"
+                  "maxLength": 325
                 }
               },
               "additionalProperties": false
             }
           },
+
           "motivation": {
             "type": "string",
-            "description": "english/bangla string"
+            "maxLength": 150
           }
         },
         "additionalProperties": false
       }
     },
+
     "finalChallenges": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "required": ["title", "description"],
         "properties": {
           "title": {
-            "type": "string",
-            "description": "Challenge title (english/bangla string)"
+            "type": "string"
           },
           "description": {
             "type": "string",
-            "description": "Challenge description (english/bangla string)"
+            "maxLength": 325
           }
         },
         "additionalProperties": false
