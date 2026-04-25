@@ -156,3 +156,48 @@ export const getMyAllGoalsService = async (email: string) => {
 
   return allGoals;
 };
+
+export const getGoalByIdService = async (email: string, goalID: string) => {
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    throw new AppError("User Not Found!", 404);
+  }
+
+  const goal = await Goal.findOne({
+    userID: user._id,
+    _id: goalID,
+  }).lean();
+
+  if (!goal) {
+    throw new AppError("Goal not found!", 404);
+  }
+
+  const dailyTaskOverView = await DailyTask.find(
+    {
+      goalID,
+    },
+    {
+      day: 1,
+      "tasks.title": 1,
+    },
+  );
+
+  const finalChallenges = await FinalChallenge.find(
+    {
+      goalID,
+    },
+    {
+      title: 1,
+      _id: 0,
+    },
+  );
+
+  return {
+    ...goal,
+    dailyTaskOverView,
+    finalChallenges,
+  };
+};

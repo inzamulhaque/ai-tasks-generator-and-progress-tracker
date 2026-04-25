@@ -1,6 +1,10 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { createGoalService, getMyAllGoalsService } from "./goal.services";
+import {
+  createGoalService,
+  getGoalByIdService,
+  getMyAllGoalsService,
+} from "./goal.services";
 
 export const createGoal = catchAsync(async (req, res) => {
   const { email } = req.user!;
@@ -33,6 +37,20 @@ export const getMyAllGoals = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Goals retrieve successfully!",
+    data: result,
+  });
+});
+
+export const getGoalById = catchAsync(async (req, res) => {
+  const { email } = req.user!;
+  const { goalID } = req.params;
+
+  const result = await getGoalByIdService(email, goalID as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Goal retrieve successfully!",
     data: result,
   });
 });
