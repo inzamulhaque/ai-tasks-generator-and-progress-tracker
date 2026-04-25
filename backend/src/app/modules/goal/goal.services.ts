@@ -36,11 +36,15 @@ export const createGoalService = async (
       - All JSON keys must be in English (exactly as shown below)
       - All text values must be written in ${language === "bangla" ? "Bangla (বাংলা)" : "English"}
 
+
     Return complete JSON in a single response. Do not stream or split.
+
+    DO NOT use placeholders like ???
+    All fields must be meaningful
     `;
 
   const aiResponse = await openAI.chat.completions.create({
-    model: "meta-llama/llama-3.3-70b-instruct:free",
+    model: "openai/gpt-oss-120b:free",
     messages: [
       {
         role: "system",
@@ -68,11 +72,6 @@ export const createGoalService = async (
   });
 
   const content = aiResponse.choices[0]!.message.content;
-  // console.log(content);
-
-  // return content;
-
-  // const jsonMatch = content!.match(/\{[\s\S]*\}/);
 
   let goal;
 
@@ -90,8 +89,6 @@ export const createGoalService = async (
   if (!goal?.finalChallenges || !Array.isArray(goal.finalChallenges)) {
     throw new AppError("AI finalChallenges missing!", 500);
   }
-
-  // return goal;
 
   const session = await mongoose.startSession();
 
@@ -122,7 +119,7 @@ export const createGoalService = async (
       }),
     );
 
-    await DailyTask.create(dailyTask, { session });
+    await DailyTask.create(dailyTask, { session, ordered: true });
 
     const finalChallenges: TFinalChallenge[] = goal.finalChallenges.map(
       (FC: Omit<TFinalChallenge, "goalID">) => ({
@@ -131,7 +128,7 @@ export const createGoalService = async (
       }),
     );
 
-    await FinalChallenge.create(finalChallenges, { session });
+    await FinalChallenge.create(finalChallenges, { session, ordered: true });
     await session.commitTransaction();
     await session.endSession();
 
