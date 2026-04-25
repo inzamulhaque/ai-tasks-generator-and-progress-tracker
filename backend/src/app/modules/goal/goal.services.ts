@@ -140,3 +140,19 @@ export const createGoalService = async (
     throw new AppError("Goal not created!", 500);
   }
 };
+
+export const getMyAllGoalsService = async (email: string) => {
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    throw new AppError("User Not Found!", 404);
+  }
+
+  const allGoals = await Goal.find({
+    userID: user._id,
+  });
+
+  return allGoals;
+};
