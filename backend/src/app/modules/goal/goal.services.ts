@@ -201,3 +201,138 @@ export const getGoalByIdService = async (email: string, goalID: string) => {
     finalChallenges,
   };
 };
+
+export const startAchieveGoalService = async (
+  email: string,
+  goalID: string,
+) => {
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    throw new AppError("User Not Found!", 404);
+  }
+
+  const session = await mongoose.startSession();
+  try {
+    await session.startTransaction();
+
+    await Goal.findOneAndUpdate(
+      {
+        _id: goalID,
+        userID: user._id,
+      },
+      {
+        $set: {
+          startingDate: new Date(),
+          status: "active",
+          progress: 1,
+        },
+      },
+      { session },
+    );
+
+    const day1Tasks = await DailyTask.findOne(
+      {
+        goalID,
+        day: 1,
+      },
+      null,
+      { session },
+    ).lean();
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return day1Tasks;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.error(error);
+    throw new AppError("Internal server error!", 500);
+  }
+};
+
+export const nextDayService = async (email: string, goalID: string) => {
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    throw new AppError("User Not Found!", 404);
+  }
+
+  const goal = await Goal.findOne({
+    _id: goalID,
+    userID: user._id,
+  }).lean();
+
+  if (!goal) {
+    throw new AppError("Goal not found!", 404);
+  }
+
+  if (!goal.progress || goal.progress < 1 || goal.progress === goal.duration) {
+    throw new AppError("Goal is not active!", 404);
+  }
+
+  const currentDayTasks = await DailyTask.findOne({
+    goalID,
+    day: goal.progress,
+  }).lean();
+
+  if (!currentDayTasks) {
+    throw new AppError("Current day task not found!", 404);
+  }
+
+  const allTasksDone = currentDayTasks.tasks.every(
+    (task) => task.isCompleted === true,
+  );
+
+  if (!allTasksDone) {
+    throw new AppError("Please complete all tasks!", 404);
+  }
+
+  const currentDay = goal.progress || 0;
+  const nextDay = currentDay + 1;
+
+  const goalStatus = currentDay == goal.duration ? "close" : goal.status;
+
+  const session = await mongoose.startSession();
+
+  try {
+    await session.startTransaction();
+
+    await Goal.updateOne(
+      {
+        _id: goalID,
+        userID: user._id,
+      },
+      {
+        $set: {
+          progress: nextDay,
+          status: goalStatus,
+        },
+      },
+      {
+        session,
+      },
+    );
+
+    const nextTasks = await DailyTask.findOne(
+      {
+        goalID: goal._id,
+        day: nextDay,
+      },
+      null,
+      { session },
+    ).lean();
+
+    return nextTasks;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.error(error);
+    throw new AppError("Internal server error!", 500);
+  }
+};

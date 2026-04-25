@@ -4,6 +4,8 @@ import {
   createGoalService,
   getGoalByIdService,
   getMyAllGoalsService,
+  nextDayService,
+  startAchieveGoalService,
 } from "./goal.services";
 
 export const createGoal = catchAsync(async (req, res) => {
@@ -51,6 +53,34 @@ export const getGoalById = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Goal retrieve successfully!",
+    data: result,
+  });
+});
+
+export const startAchieveGoal = catchAsync(async (req, res) => {
+  const { email } = req.user!;
+  const { goalID } = req.params;
+
+  const result = await startAchieveGoalService(email, goalID as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Start working successfully!",
+    data: result,
+  });
+});
+
+export const nextDay = catchAsync(async (req, res) => {
+  const { email } = req.user!;
+  const { goalID } = req.params;
+
+  const result = await nextDayService(email, goalID as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Get next day tasks successfully!",
     data: result,
   });
 });
