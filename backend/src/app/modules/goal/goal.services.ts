@@ -289,9 +289,9 @@ export const nextDayService = async (email: string, goalID: string) => {
     (task) => task.isCompleted === true,
   );
 
-  if (!allTasksDone) {
-    throw new AppError("Please complete all tasks!", 404);
-  }
+  // if (!allTasksDone) {
+  //   throw new AppError("Please complete all tasks!", 404);
+  // }
 
   const currentDay = goal.progress || 0;
   const nextDay = currentDay + 1;
@@ -335,4 +335,22 @@ export const nextDayService = async (email: string, goalID: string) => {
     console.error(error);
     throw new AppError("Internal server error!", 500);
   }
+};
+
+export const completedTaskService = async (taskId: string) => {
+  const updatedTask = await DailyTask.findOneAndUpdate(
+    {
+      "tasks._id": taskId,
+    },
+    {
+      $set: {
+        "tasks.$.isCompleted": true,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
+  return updatedTask;
 };

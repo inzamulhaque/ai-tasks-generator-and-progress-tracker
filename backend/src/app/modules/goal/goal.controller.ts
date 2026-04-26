@@ -1,6 +1,7 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import {
+  completedTaskService,
   createGoalService,
   getGoalByIdService,
   getMyAllGoalsService,
@@ -81,6 +82,19 @@ export const nextDay = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Get next day tasks successfully!",
+    data: result,
+  });
+});
+
+export const completedTask = catchAsync(async (req, res) => {
+  const { taskID } = req.params;
+
+  const result = await completedTaskService(taskID as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Task completed successfully!",
     data: result,
   });
 });
