@@ -3,6 +3,7 @@ import auth from "../../middlewares/auth";
 import validateRequest from "../../middlewares/validateRequest";
 import { validateCreateGoalSchema } from "./goal.validation";
 import {
+  completeChallenges,
   completedTask,
   createGoal,
   getFinalChallenges,
@@ -32,6 +33,8 @@ router.get("/get-next-day-tasks/:goalID", auth, nextDay);
 router.patch("/complete-task/:taskID", auth, completedTask);
 
 router.get("/final-challenges/:goalID", auth, getFinalChallenges);
+
+router.patch("/complete-challenge/:chngID", auth, completeChallenges);
 
 const goalRoutes = router;
 export default goalRoutes;

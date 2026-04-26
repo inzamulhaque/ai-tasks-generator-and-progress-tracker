@@ -372,3 +372,39 @@ export const getFinalChallengesService = async (goalID: string) => {
 
   return challenges;
 };
+
+export const completeChallengesService = async (chngID: string) => {
+  const challenge = await FinalChallenge.findById(chngID);
+
+  if (!challenge) {
+    throw new AppError("Challenge not found!", 404);
+  }
+
+  const updateChng = await FinalChallenge.findByIdAndUpdate(
+    chngID,
+    {
+      $set: {
+        isCompleted: true,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
+  const allChallenges = await FinalChallenge.find({
+    goalID: challenge.goalID,
+  }).lean();
+
+  const isAllChallengesComplete = allChallenges.every((c) => c.isCompleted);
+
+  if (isAllChallengesComplete) {
+    await Goal.findByIdAndUpdate(challenge.goalID, {
+      $set: {
+        status: "close",
+      },
+    });
+  }
+
+  return updateChng;
+};

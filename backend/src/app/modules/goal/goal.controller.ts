@@ -1,6 +1,7 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import {
+  completeChallengesService,
   completedTaskService,
   createGoalService,
   getFinalChallengesService,
@@ -109,6 +110,19 @@ export const getFinalChallenges = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Final challenges retrieve successfully!",
+    data: result,
+  });
+});
+
+export const completeChallenges = catchAsync(async (req, res) => {
+  const { chngID } = req.params;
+
+  const result = await completeChallengesService(chngID as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Complete challenge successfully!",
     data: result,
   });
 });
