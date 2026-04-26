@@ -289,9 +289,9 @@ export const nextDayService = async (email: string, goalID: string) => {
     (task) => task.isCompleted === true,
   );
 
-  // if (!allTasksDone) {
-  //   throw new AppError("Please complete all tasks!", 404);
-  // }
+  if (!allTasksDone) {
+    throw new AppError("Please complete all tasks!", 404);
+  }
 
   const currentDay = goal.progress || 0;
   const nextDay = currentDay + 1;
@@ -353,4 +353,22 @@ export const completedTaskService = async (taskId: string) => {
   );
 
   return updatedTask;
+};
+
+export const getFinalChallengesService = async (goalID: string) => {
+  const goal = await Goal.findById(goalID);
+
+  if (!goal) {
+    throw new AppError("Goal not found!", 404);
+  }
+
+  if (goal.duration !== goal.progress) {
+    throw new AppError("Please complete your daily tasks!", 400);
+  }
+
+  const challenges = await FinalChallenge.find({
+    goalID,
+  });
+
+  return challenges;
 };

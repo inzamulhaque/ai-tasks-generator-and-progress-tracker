@@ -5,6 +5,7 @@ import { validateCreateGoalSchema } from "./goal.validation";
 import {
   completedTask,
   createGoal,
+  getFinalChallenges,
   getGoalById,
   getMyAllGoals,
   nextDay,
@@ -29,6 +30,8 @@ router.get("/start/:goalID", auth, startAchieveGoal);
 router.get("/get-next-day-tasks/:goalID", auth, nextDay);
 
 router.patch("/complete-task/:taskID", auth, completedTask);
+
+router.get("/final-challenges/:goalID", auth, getFinalChallenges);
 
 const goalRoutes = router;
 export default goalRoutes;

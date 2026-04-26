@@ -3,6 +3,7 @@ import sendResponse from "../../utils/sendResponse";
 import {
   completedTaskService,
   createGoalService,
+  getFinalChallengesService,
   getGoalByIdService,
   getMyAllGoalsService,
   nextDayService,
@@ -95,6 +96,19 @@ export const completedTask = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Task completed successfully!",
+    data: result,
+  });
+});
+
+export const getFinalChallenges = catchAsync(async (req, res) => {
+  const { goalID } = req.params;
+
+  const result = await getFinalChallengesService(goalID as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Final challenges retrieve successfully!",
     data: result,
   });
 });
