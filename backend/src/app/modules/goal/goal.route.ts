@@ -6,6 +6,7 @@ import {
   completeChallenges,
   completedTask,
   createGoal,
+  deleteGoal,
   getFinalChallenges,
   getGoalById,
   getMyAllGoals,
@@ -35,6 +36,8 @@ router.patch("/complete-task/:taskID", auth, completedTask);
 router.get("/final-challenges/:goalID", auth, getFinalChallenges);
 
 router.patch("/complete-challenge/:chngID", auth, completeChallenges);
+
+router.delete("/delete-goal/:goalID", auth, deleteGoal);
 
 const goalRoutes = router;
 export default goalRoutes;

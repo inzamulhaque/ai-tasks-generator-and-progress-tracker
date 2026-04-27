@@ -4,6 +4,7 @@ import {
   completeChallengesService,
   completedTaskService,
   createGoalService,
+  deleteGoalService,
   getFinalChallengesService,
   getGoalByIdService,
   getMyAllGoalsService,
@@ -123,6 +124,20 @@ export const completeChallenges = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Complete challenge successfully!",
+    data: result,
+  });
+});
+
+export const deleteGoal = catchAsync(async (req, res) => {
+  const { email } = req.user!;
+  const { goalID } = req.params;
+
+  const result = await deleteGoalService(email, goalID as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Goal deleted successfully!",
     data: result,
   });
 });

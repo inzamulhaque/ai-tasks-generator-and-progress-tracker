@@ -408,3 +408,54 @@ export const completeChallengesService = async (chngID: string) => {
 
   return updateChng;
 };
+
+export const deleteGoalService = async (email: string, goalID: string) => {
+  const user = await User.findOne({
+    email,
+  }).lean();
+
+  if (!user) {
+    throw new AppError("User Not Found!", 404);
+  }
+
+  const goal = await Goal.findOne({
+    _id: goalID,
+    userID: user._id,
+  });
+
+  if (!goal) {
+    throw new AppError("Goal not found!", 404);
+  }
+
+  const session = await mongoose.startSession();
+
+  try {
+    await session.startTransaction();
+
+    await DailyTask.deleteMany(
+      {
+        goalID: goal._id,
+      },
+      { session },
+    );
+
+    await FinalChallenge.deleteMany(
+      {
+        goalID: goal._id,
+      },
+      { session },
+    );
+
+    await Goal.findByIdAndDelete(goal._id, { session });
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return { message: "Goal deleted successfully!" };
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.error(error);
+    throw new AppError("Internal server error!", 500);
+  }
+};
