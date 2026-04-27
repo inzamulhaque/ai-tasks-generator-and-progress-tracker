@@ -22,7 +22,7 @@ export const createGoalService = async (
     throw new AppError("User Not Found!", 404);
   }
 
-  const propmt = `
+  const prompt = `
     You are a goal planning assistant. Respond ONLY with a valid JSON object.
     No markdown, no explanation, no code blocks. Start with { and end with }.
 
@@ -54,7 +54,7 @@ export const createGoalService = async (
 
       {
         role: "user",
-        content: propmt,
+        content: prompt,
       },
     ],
 
