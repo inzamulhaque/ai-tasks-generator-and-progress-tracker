@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "required": ["analysis", "encouragement", "nextAction", "tip"],
+  "properties": {
+    "analysis": {
+      "type": "string",
+      "description": "Analysis of the user's progress or situation",
+      "maxLength": 700
+    },
+    "encouragement": {
+      "type": "string",
+      "description": "Motivational encouragement for the user",
+      "maxLength": 400
+    },
+    "nextAction": {
+      "type": "string",
+      "description": "Recommended next action for the user",
+      "maxLength": 350
+    },
+    "tip": {
+      "type": "string",
+      "description": "Helpful tip or advice",
+      "maxLength": 250
+    }
+  },
+  "additionalProperties": false
+}
