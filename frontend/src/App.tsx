@@ -1,9 +1,10 @@
-import Home from "./components/Home/Home";
+import { RouterProvider } from "react-router";
+import router from "./routes/routes";
 
 function App() {
   return (
     <>
-      <Home />
+      <RouterProvider router={router} />
     </>
   );
 }

@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Link } from "react-router";
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
@@ -18,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="w-full border-b bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex items-center justify-between px-4 py-3 max-w-6xl">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 cursor-pointer">
           <div
             className={`h-8 w-8 rounded-lg bg-primary flex items-center justify-center ${theme === "dark" ? "text-black" : "text-white"} font-bold`}
           >
@@ -30,7 +31,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="cursor-pointer">
                 {theme === "dark" ? (
                   <Moon className="h-5 w-5" />
                 ) : theme === "light" ? (
@@ -56,20 +57,24 @@ const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button className="rounded-full px-5">Get Started</Button>
+          <Link to="/signin">
+            <Button className="rounded-full px-5 cursor-pointer">
+              Get Started
+            </Button>
+          </Link>
         </div>
 
         {/* MOBILE MENU */}
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="cursor-pointer">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
 
             <SheetContent side="right" className="w-72">
-              <div className="flex items-center gap-2 my-2 ml-1">
+              <div className="flex items-center gap-2 my-2 ml-1 cursor-pointer">
                 <div
                   className={`h-8 w-8 rounded-lg bg-primary flex items-center justify-center ${theme === "dark" ? "text-black" : "text-white"} font-bold`}
                 >
@@ -82,7 +87,7 @@ const Navbar = () => {
                 <Button
                   variant="outline"
                   onClick={() => setTheme("light")}
-                  className="justify-start"
+                  className="justify-start cursor-pointer"
                 >
                   <Sun className="mr-2 h-4 w-4" /> Light
                 </Button>
@@ -105,7 +110,9 @@ const Navbar = () => {
               </div>
 
               <SheetClose asChild>
-                <Button className="w-full rounded-full">Get Started</Button>
+                <Link to="/signin">
+                  <Button className="w-full rounded-full">Get Started</Button>
+                </Link>
               </SheetClose>
             </SheetContent>
           </Sheet>
