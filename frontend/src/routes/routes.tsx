@@ -4,6 +4,7 @@ import HomePage from "../components/Home/HomePage";
 import { createBrowserRouter } from "react-router";
 import ForgotPasswordPage from "../components/Auth/ForgotPasswordPage";
 import OtpVerifyPage from "../components/Auth/OTPVerifyPage";
+import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
   {
     path: "/otp-verify",
     element: <OtpVerifyPage />,
+  },
+
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage />,
   },
 ]);
 
