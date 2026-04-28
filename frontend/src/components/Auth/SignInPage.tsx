@@ -66,12 +66,14 @@ const SignInPage = () => {
           </div>
 
           <div className="flex justify-end">
-            <button
-              type="button"
-              className="text-sm text-primary hover:underline cursor-pointer"
-            >
-              Forgot Password?
-            </button>
+            <Link to={"/forgot-password"}>
+              <button
+                type="button"
+                className="text-sm text-primary hover:underline cursor-pointer"
+              >
+                Forgot Password?
+              </button>
+            </Link>
           </div>
 
           <Button
