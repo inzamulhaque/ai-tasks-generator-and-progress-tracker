@@ -2,6 +2,7 @@ import express, { type Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./routes/index";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 
 const app: Application = express();
 app.use(
@@ -21,5 +22,7 @@ app.get("/", (_req, res) => {
     statusCode: 200,
   });
 });
+
+app.use(globalErrorHandler);
 
 export default app;
