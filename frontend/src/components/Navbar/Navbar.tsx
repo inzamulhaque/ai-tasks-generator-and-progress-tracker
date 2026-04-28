@@ -62,6 +62,12 @@ const Navbar = () => {
               Get Started
             </Button>
           </Link>
+
+          <Link to="/signup">
+            <Button className="rounded-full px-5 cursor-pointer bg-blue-400">
+              Sign Up
+            </Button>
+          </Link>
         </div>
 
         {/* MOBILE MENU */}
@@ -112,6 +118,12 @@ const Navbar = () => {
               <SheetClose asChild>
                 <Link to="/signin">
                   <Button className="w-full rounded-full">Get Started</Button>
+                </Link>
+
+                <Link to="/signup">
+                  <Button className="w-full rounded-full bg-blue-400">
+                    Sign Up
+                  </Button>
                 </Link>
               </SheetClose>
             </SheetContent>
