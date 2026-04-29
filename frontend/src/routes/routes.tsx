@@ -6,6 +6,7 @@ import ForgotPasswordPage from "../components/Auth/ForgotPasswordPage";
 
 import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
 import OtpVerifyPage from "../components/Auth/OtpVerifyPage";
+import NotFoundPage from "../components/Shared/Not404";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,16 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPasswordPage />,
+  },
+
+  {
+    path: "/dashboard",
+    element: <></>,
+  },
+
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 

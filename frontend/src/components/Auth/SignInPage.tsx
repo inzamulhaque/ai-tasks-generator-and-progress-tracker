@@ -3,12 +3,14 @@ import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import GoogleSignIn from "./GoogleSignIn";
 import { toast } from "sonner";
+import { storeToken } from "../../utils/tokenStore";
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,6 +52,10 @@ const SignInPage = () => {
           onClick: () => console.log("Undo"),
         },
       });
+
+      storeToken("accessToken", data.data.token);
+
+      navigate("/dashboard");
     }
   };
 
