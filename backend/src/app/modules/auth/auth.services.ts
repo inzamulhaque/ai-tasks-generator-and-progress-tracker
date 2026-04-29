@@ -249,3 +249,19 @@ export const resetPasswordService = async (email: string, password: string) => {
     throw new AppError("Failed to process reset password request!", 500);
   }
 };
+
+export const signinWithGoogleService = async (user: {
+  name: string;
+  email: string;
+}) => {
+  const result = await User.find({
+    email: user.email,
+  });
+
+  if (!result) {
+    await User.create(user);
+  }
+
+  const token = jwtUtils.generateToken({ email: user.email });
+  return { token };
+};

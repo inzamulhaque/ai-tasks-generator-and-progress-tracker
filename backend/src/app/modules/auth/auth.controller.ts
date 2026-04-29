@@ -6,6 +6,7 @@ import {
   getMeService,
   resetPasswordService,
   signinWithEmailService,
+  signinWithGoogleService,
   verifyEmailService,
   verifyForgotPasswordOtpService,
 } from "./auth.services";
@@ -88,6 +89,17 @@ export const resetPassword = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Password reset successfully!",
+    data: result,
+  });
+});
+
+export const signinWithGoogle = catchAsync(async (req, res) => {
+  const result = await signinWithGoogleService(req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Signin with google successfully!",
     data: result,
   });
 });

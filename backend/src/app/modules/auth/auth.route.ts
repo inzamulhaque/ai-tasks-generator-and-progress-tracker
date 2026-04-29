@@ -7,6 +7,7 @@ import {
   validateOtpValidationSchema,
   validateResetPasswordSchema,
   validateSigninSchema,
+  validateSigninWithGoogleSchema,
 } from "./auth.validation";
 import {
   changePassword,
@@ -14,6 +15,7 @@ import {
   getMe,
   resetPassword,
   signin,
+  signinWithGoogle,
   verifyEmail,
   verifyForgotPasswordOtp,
 } from "./auth.controller";
@@ -55,6 +57,13 @@ router.patch(
   auth,
   validateRequest(validateResetPasswordSchema),
   resetPassword,
+);
+
+router.post(
+  "/signin-with-google",
+
+  validateRequest(validateSigninWithGoogleSchema),
+  signinWithGoogle,
 );
 
 const AuthRouters = router;
