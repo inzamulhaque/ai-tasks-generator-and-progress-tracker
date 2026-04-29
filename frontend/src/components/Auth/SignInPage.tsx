@@ -1,13 +1,57 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Link } from "react-router";
 import GoogleSignIn from "./GoogleSignIn";
+import { toast } from "sonner";
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    const res = await fetch(
+      `${import.meta.env.VITE_BASE_API_URL}/auth/signin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      },
+    );
+
+    const data = await res.json();
+
+    if (!data.success) {
+      toast.error(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    } else {
+      toast.success(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
+  };
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
@@ -32,13 +76,14 @@ const SignInPage = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSignIn}>
           <div>
             <label className="text-sm font-medium mb-2 block">Email</label>
             <Input
               type="email"
               placeholder="Enter your email"
               className="h-12 rounded-xl"
+              name="email"
             />
           </div>
 
@@ -50,6 +95,7 @@ const SignInPage = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 className="h-12 rounded-xl pr-12"
+                name="password"
               />
 
               <button
