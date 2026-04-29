@@ -3,8 +3,9 @@ import SignInPage from "../components/Auth/SignInPage";
 import HomePage from "../components/Home/HomePage";
 import { createBrowserRouter } from "react-router";
 import ForgotPasswordPage from "../components/Auth/ForgotPasswordPage";
-import OtpVerifyPage from "../components/Auth/OTPVerifyPage";
+
 import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
+import OtpVerifyPage from "../components/Auth/OtpVerifyPage";
 
 const router = createBrowserRouter([
   {
