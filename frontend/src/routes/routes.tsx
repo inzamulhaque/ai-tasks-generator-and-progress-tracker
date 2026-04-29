@@ -7,6 +7,7 @@ import ForgotPasswordPage from "../components/Auth/ForgotPasswordPage";
 import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
 import OtpVerifyPage from "../components/Auth/OtpVerifyPage";
 import NotFoundPage from "../components/Shared/Not404";
+import ProtectedRoute from "../components/Dashboard/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +42,13 @@ const router = createBrowserRouter([
 
   {
     path: "/dashboard",
-    element: <></>,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        index: true,
+        element: <>Dashboard</>,
+      },
+    ],
   },
 
   {

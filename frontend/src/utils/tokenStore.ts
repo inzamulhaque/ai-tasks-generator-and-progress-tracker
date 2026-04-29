@@ -1,3 +1,7 @@
 export const storeToken = (name: string, token: string) => {
   sessionStorage.setItem(name, token);
 };
+
+export const getToken = (name: string) => {
+  return sessionStorage.getItem(name);
+};
