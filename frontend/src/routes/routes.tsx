@@ -6,7 +6,7 @@ import ForgotPasswordPage from "../components/Auth/ForgotPasswordPage";
 
 import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
 import OtpVerifyPage from "../components/Auth/OtpVerifyPage";
-import NotFoundPage from "../components/Shared/Not404";
+import NotFoundPage from "../components/Shared/NotFound";
 import ProtectedRoute from "../components/Dashboard/ProtectedRoute";
 
 const router = createBrowserRouter([
