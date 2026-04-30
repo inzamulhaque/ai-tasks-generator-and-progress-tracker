@@ -25,31 +25,14 @@ import { Badge } from "../ui/badge";
 import { useEffect, useState } from "react";
 import { getToken, removeToken } from "../../utils/tokenStore";
 import { useNavigate } from "react-router";
-
-type Goal = {
-  _id: string;
-  userID: string;
-  name: string;
-  description: string;
-  duration: number;
-  timePerDay: number;
-  finalGoal: string;
-  status: "active" | "inactive" | "close";
-  progress: number;
-};
-
-type Profile = {
-  _id: string;
-  name: string;
-  email: string;
-  status: "active" | "inactive";
-};
+import type { TGoal } from "../../types/goal.ts";
+import type { TProfile } from "../../types/profile.ts";
 
 const DashboardPage = () => {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [goals, setGoals] = useState<Goal[] | null>(null);
+  const [profile, setProfile] = useState<TProfile | null>(null);
+  const [goals, setGoals] = useState<TGoal[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -292,7 +275,10 @@ const DashboardPage = () => {
                     </p>
                   </div>
 
-                  <Button className="w-full rounded-xl cursor-pointer">
+                  <Button
+                    className="w-full rounded-xl cursor-pointer"
+                    onClick={() => navigate(`/dashboard/goal/${goal?._id}`)}
+                  >
                     View Details
                   </Button>
                 </CardContent>

@@ -9,6 +9,7 @@ import OtpVerifyPage from "../components/Auth/OtpVerifyPage";
 import NotFoundPage from "../components/Shared/NotFound";
 import ProtectedRoute from "../components/Dashboard/ProtectedRoute";
 import DashboardPage from "../components/Dashboard/DashboardPage";
+import GoalDetails from "../components/Dashboard/GoalDetails";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardPage />,
+      },
+
+      {
+        path: "goal/:id",
+        element: <GoalDetails />,
       },
     ],
   },
