@@ -5,3 +5,7 @@ export const storeToken = (name: string, token: string) => {
 export const getToken = (name: string) => {
   return sessionStorage.getItem(name);
 };
+
+export const removeToken = (name: string) => {
+  sessionStorage.removeItem(name);
+};

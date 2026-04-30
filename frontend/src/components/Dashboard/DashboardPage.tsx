@@ -1,5 +1,15 @@
 import { useTheme } from "next-themes";
-import { Moon, Sun, Monitor, Target, Clock, Trophy } from "lucide-react";
+import {
+  Moon,
+  Sun,
+  Monitor,
+  Target,
+  Clock,
+  Trophy,
+  LogOut,
+  UserCircle2,
+  Clock3,
+} from "lucide-react";
 
 import {
   DropdownMenu,
@@ -12,83 +22,157 @@ import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Badge } from "../ui/badge";
+import { useEffect, useState } from "react";
+import { getToken, removeToken } from "../../utils/tokenStore";
+import { useNavigate } from "react-router";
 
 type Goal = {
   _id: string;
+  userID: string;
   name: string;
   description: string;
   duration: number;
   timePerDay: number;
   finalGoal: string;
-  status: "active" | "inactive" | "completed";
+  status: "active" | "inactive" | "close";
   progress: number;
 };
 
-type DashboardProps = {
+type Profile = {
+  _id: string;
   name: string;
   email: string;
-  goals: Goal[];
+  status: "active" | "inactive";
 };
 
-const DashboardPage = ({ name, email, goals }: DashboardProps) => {
+const DashboardPage = () => {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [goals, setGoals] = useState<Goal[] | null>(null);
 
-  const activeGoals = goals.filter((g) => g.status === "active").length;
-  const completedGoals = goals.filter((g) => g.status === "completed").length;
-  const totalHours = goals.reduce(
+  useEffect(() => {
+    const fetchData = async () => {
+      const profileRes = await fetch(
+        `${import.meta.env.VITE_BASE_API_URL}/auth/me`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getToken("accessToken") as string,
+          },
+        },
+      );
+
+      const profileData = await profileRes.json();
+
+      setProfile(profileData?.data);
+
+      const goalsRes = await fetch(
+        `${import.meta.env.VITE_BASE_API_URL}/goal/my-all-goals`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getToken("accessToken") as string,
+          },
+        },
+      );
+
+      const goalsData = await goalsRes.json();
+
+      setGoals(goalsData?.data);
+    };
+
+    fetchData();
+  }, []);
+
+  const signOut = () => {
+    removeToken("accessToken");
+    navigate("/signin");
+  };
+
+  const activeGoals = goals?.filter((g) => g.status === "active").length;
+  const completedGoals = goals?.filter((g) => g.status === "close").length;
+  const totalHours = goals?.reduce(
     (acc, goal) => acc + goal.duration * goal.timePerDay,
     0,
   );
 
   return (
     <main className="min-h-screen bg-muted/30">
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <div>
-            <h1 className="text-2xl font-bold">Welcome back, {name} 👋</h1>
-            <p className="text-sm text-muted-foreground">{email}</p>
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <UserCircle2 className="h-7 w-7" />
+            </div>
+
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+                Welcome back, {profile?.name} 👋
+              </h1>
+
+              <p className="text-sm text-muted-foreground">{profile?.email}</p>
+            </div>
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="cursor-pointer">
-                {theme === "dark" ? (
-                  <Moon className="h-5 w-5" />
-                ) : theme === "light" ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Monitor className="h-5 w-5" />
-                )}
-              </Button>
-            </DropdownMenuTrigger>
+          <div className="flex items-center gap-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="cursor-pointer rounded-xl"
+                >
+                  {theme === "dark" ? (
+                    <Moon className="h-5 w-5" />
+                  ) : theme === "light" ? (
+                    <Sun className="h-5 w-5" />
+                  ) : (
+                    <Monitor className="h-5 w-5" />
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                <Sun className="mr-2 h-4 w-4" /> Light
-              </DropdownMenuItem>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setTheme("light")}>
+                  <Sun className="mr-2 h-4 w-4" />
+                  Light
+                </DropdownMenuItem>
 
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
-                <Moon className="mr-2 h-4 w-4" /> Dark
-              </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                  <Moon className="mr-2 h-4 w-4" />
+                  Dark
+                </DropdownMenuItem>
 
-              <DropdownMenuItem onClick={() => setTheme("system")}>
-                <Monitor className="mr-2 h-4 w-4" /> System
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuItem onClick={() => setTheme("system")}>
+                  <Monitor className="mr-2 h-4 w-4" />
+                  System
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Button
+              variant="destructive"
+              className="rounded-xl cursor-pointer gap-2"
+              onClick={signOut}
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Sign Out</span>
+            </Button>
+          </div>
         </div>
       </header>
 
       <section className="mx-auto max-w-7xl px-4 py-8 space-y-8">
-        {/* STATS */}
         <div className="grid gap-4 md:grid-cols-3">
           <Card className="rounded-2xl">
             <CardContent className="flex items-center gap-4 p-6">
               <Target className="h-10 w-10 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Total Goals</p>
-                <h3 className="text-2xl font-bold">{goals.length}</h3>
+                <h3 className="text-2xl font-bold">{goals?.length}</h3>
               </div>
             </CardContent>
           </Card>
@@ -114,36 +198,52 @@ const DashboardPage = ({ name, email, goals }: DashboardProps) => {
           </Card>
         </div>
 
-        {/* TOTAL STUDY HOURS */}
-        <Card className="rounded-2xl">
-          <CardContent className="p-6">
-            <p className="text-sm text-muted-foreground">
-              Total Planned Learning Hours
-            </p>
-            <h2 className="mt-2 text-3xl font-bold">{totalHours} Hours</h2>
+        <Card className="rounded-3xl border bg-gradient-to-br from-primary/10 via-background to-background shadow-sm">
+          <CardContent className="flex items-center justify-between p-6">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                Total Planned Learning Hours
+              </p>
+
+              <h2 className="mt-2 text-4xl font-bold tracking-tight">
+                {totalHours}
+                <span className="ml-2 text-lg font-medium text-muted-foreground">
+                  hrs
+                </span>
+              </h2>
+
+              <p className="mt-2 text-xs text-muted-foreground">
+                Across all your active and upcoming goals
+              </p>
+            </div>
+
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+              <Clock3 className="h-7 w-7" />
+            </div>
           </CardContent>
         </Card>
 
-        {/* GOALS LIST */}
         <div>
           <h2 className="mb-4 text-2xl font-bold">Your Goals</h2>
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {goals.map((goal) => (
+            {goals?.map((goal) => (
               <Card
                 key={goal._id}
-                className="rounded-2xl border transition-all hover:shadow-lg"
+                className="rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               >
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="p-6 space-y-5">
                   <div className="flex items-start justify-between gap-3">
-                    <h3 className="font-semibold text-lg">{goal.name}</h3>
+                    <h3 className="text-lg font-semibold leading-snug">
+                      {goal.name}
+                    </h3>
 
                     <Badge
                       variant={
-                        goal.status === "completed"
-                          ? "default"
-                          : goal.status === "active"
-                            ? "secondary"
+                        goal.status === "active"
+                          ? "secondary"
+                          : goal.status === "close"
+                            ? "default"
                             : "outline"
                       }
                     >
@@ -158,10 +258,17 @@ const DashboardPage = ({ name, email, goals }: DashboardProps) => {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Progress</span>
-                      <span>{goal.progress}%</span>
+                      <span>
+                        {goal.progress} / {goal.duration} Days
+                      </span>
                     </div>
 
-                    <Progress value={goal.progress} />
+                    <Progress
+                      value={Math.min(
+                        (goal.progress / goal.duration) * 100,
+                        100,
+                      )}
+                    />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -177,11 +284,17 @@ const DashboardPage = ({ name, email, goals }: DashboardProps) => {
                   </div>
 
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">
+                    <p className="mb-1 text-sm text-muted-foreground">
                       Final Goal
                     </p>
-                    <p className="text-sm font-medium">{goal.finalGoal}</p>
+                    <p className="text-sm font-medium line-clamp-2">
+                      {goal.finalGoal}
+                    </p>
                   </div>
+
+                  <Button className="w-full rounded-xl cursor-pointer">
+                    View Details
+                  </Button>
                 </CardContent>
               </Card>
             ))}
