@@ -7,6 +7,7 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { CalendarDays, Clock, PlayCircle, Target } from "lucide-react";
 import { Progress } from "../ui/progress";
+import Header from "./Header";
 
 type TTask = {
   title: string;
@@ -65,6 +66,7 @@ const GoalDetails = () => {
 
   return (
     <>
+      <Header />
       <main className="mx-auto max-w-6xl px-4 py-8 space-y-8">
         <Card className="rounded-3xl shadow-sm">
           <CardContent className="p-8 space-y-6">
@@ -79,7 +81,7 @@ const GoalDetails = () => {
                 </p>
               </div>
 
-              <Button className="rounded-xl gap-2 text-base px-6 py-6">
+              <Button className="rounded-xl gap-2 text-base px-6 py-6 cursor-pointer">
                 <PlayCircle className="h-5 w-5" />
                 Start Work
               </Button>

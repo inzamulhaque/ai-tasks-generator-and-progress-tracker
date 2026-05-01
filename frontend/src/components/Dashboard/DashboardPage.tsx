@@ -1,56 +1,22 @@
-import { useTheme } from "next-themes";
-import {
-  Moon,
-  Sun,
-  Monitor,
-  Target,
-  Clock,
-  Trophy,
-  LogOut,
-  UserCircle2,
-  Clock3,
-} from "lucide-react";
-
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "../ui/dropdown-menu";
+import { Target, Clock, Trophy, Clock3 } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Badge } from "../ui/badge";
 import { useEffect, useState } from "react";
-import { getToken, removeToken } from "../../utils/tokenStore";
+import { getToken } from "../../utils/tokenStore";
 import { useNavigate } from "react-router";
 import type { TGoal } from "../../types/goal.ts";
-import type { TProfile } from "../../types/profile.ts";
+import Header from "./Header";
 
 const DashboardPage = () => {
-  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<TProfile | null>(null);
+
   const [goals, setGoals] = useState<TGoal[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const profileRes = await fetch(
-        `${import.meta.env.VITE_BASE_API_URL}/auth/me`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: getToken("accessToken") as string,
-          },
-        },
-      );
-
-      const profileData = await profileRes.json();
-
-      setProfile(profileData?.data);
-
       const goalsRes = await fetch(
         `${import.meta.env.VITE_BASE_API_URL}/goal/my-all-goals`,
         {
@@ -70,11 +36,6 @@ const DashboardPage = () => {
     fetchData();
   }, []);
 
-  const signOut = () => {
-    removeToken("accessToken");
-    navigate("/signin");
-  };
-
   const activeGoals = goals?.filter((g) => g.status === "active").length;
   const completedGoals = goals?.filter((g) => g.status === "close").length;
   const totalHours = goals?.reduce(
@@ -84,69 +45,7 @@ const DashboardPage = () => {
 
   return (
     <main className="min-h-screen bg-muted/30">
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <UserCircle2 className="h-7 w-7" />
-            </div>
-
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-                Welcome back, {profile?.name} 👋
-              </h1>
-
-              <p className="text-sm text-muted-foreground">{profile?.email}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="cursor-pointer rounded-xl"
-                >
-                  {theme === "dark" ? (
-                    <Moon className="h-5 w-5" />
-                  ) : theme === "light" ? (
-                    <Sun className="h-5 w-5" />
-                  ) : (
-                    <Monitor className="h-5 w-5" />
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                  <Sun className="mr-2 h-4 w-4" />
-                  Light
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  <Moon className="mr-2 h-4 w-4" />
-                  Dark
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                  <Monitor className="mr-2 h-4 w-4" />
-                  System
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Button
-              variant="destructive"
-              className="rounded-xl cursor-pointer gap-2"
-              onClick={signOut}
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Sign Out</span>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <section className="mx-auto max-w-7xl px-4 py-8 space-y-8">
         <div className="grid gap-4 md:grid-cols-3">
@@ -203,6 +102,30 @@ const DashboardPage = () => {
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary">
               <Clock3 className="h-7 w-7" />
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-3xl border bg-primary text-primary-foreground shadow-lg">
+          <CardContent className="flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">
+                Ready to Start a New Learning Journey?
+              </h2>
+
+              <p className="mt-2 text-sm text-primary-foreground/80">
+                Create a new AI-powered learning goal and get a personalized
+                roadmap instantly.
+              </p>
+            </div>
+
+            <Button
+              variant="secondary"
+              size="lg"
+              className="rounded-xl gap-2 cursor-pointer"
+              onClick={() => navigate("/dashboard/create-goal")}
+            >
+              + Create New Goal
+            </Button>
           </CardContent>
         </Card>
 
