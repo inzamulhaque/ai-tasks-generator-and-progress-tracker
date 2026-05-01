@@ -10,6 +10,7 @@ import NotFoundPage from "../components/Shared/NotFound";
 import ProtectedRoute from "../components/Dashboard/ProtectedRoute";
 import DashboardPage from "../components/Dashboard/DashboardPage";
 import GoalDetails from "../components/Dashboard/GoalDetails";
+import CreateGoal from "../components/Dashboard/CreateGoal";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
       {
         path: "goal/:id",
         element: <GoalDetails />,
+      },
+
+      {
+        path: "create-goal",
+        element: <CreateGoal />,
       },
     ],
   },
