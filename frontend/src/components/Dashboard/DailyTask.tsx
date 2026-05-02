@@ -13,17 +13,31 @@ import { TDailyTask, TTask } from "../../types/task";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import { getToken } from "../../utils/tokenStore";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 const DailyTask = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const preProgress = searchParams.get("progress");
+  const preProgress = Number(searchParams.get("progress") || 0);
+  const duration = Number(searchParams.get("duration") || 0);
+
   const [dailyTask, setDailyTask] = useState<TDailyTask | null>(null);
 
   useEffect(() => {
-    if (Number(preProgress) === 0) {
+    if (preProgress === 0) {
       (async function () {
         const res = await fetch(
           `${import.meta.env.VITE_BASE_API_URL}/goal/start/${id}`,
@@ -38,12 +52,21 @@ const DailyTask = () => {
 
         const data = await res.json();
 
-        console.log(data);
-        setDailyTask(data?.data);
+        if (data?.success) {
+          setDailyTask(data?.data);
+        } else {
+          toast.error(data.message, {
+            position: "top-right",
+            action: {
+              label: "Undo",
+              onClick: () => console.log("Undo"),
+            },
+          });
+        }
       })();
     }
 
-    if (Number(preProgress) !== 0) {
+    if (preProgress !== 0) {
       (async function () {
         const res = await fetch(
           `${import.meta.env.VITE_BASE_API_URL}/goal/get-next-day-tasks/${id}`,
@@ -58,8 +81,25 @@ const DailyTask = () => {
 
         const data = await res.json();
 
-        console.log(data);
-        setDailyTask(data?.data);
+        if (data?.success) {
+          setDailyTask(data?.data);
+        } else {
+          if (data.message === "Previous the task not completed!") {
+            const preDay = preProgress - 1;
+
+            navigate(
+              `/dashboard/task/${id}?progress=${preDay}&duration=${duration}`,
+            );
+          }
+
+          toast.error(data.message, {
+            position: "top-right",
+            action: {
+              label: "Undo",
+              onClick: () => console.log("Undo"),
+            },
+          });
+        }
       })();
     }
   }, [id, preProgress]);
@@ -68,17 +108,67 @@ const DailyTask = () => {
     return "Loading...";
   }
 
-  const handleNextDay = () => {
-    const nextProgress = progress + 1;
-
-    navigate(`/dashboard/task/${id}?progress=${nextProgress}`);
-  };
-
   const completedTasks = dailyTask.tasks.filter(
     (task: TTask) => task.isCompleted,
   ).length;
 
   const progress = (completedTasks / dailyTask.tasks.length) * 100;
+
+  const handleCompleteTask = async (taskId: string) => {
+    setDailyTask((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        tasks: prev.tasks.map((task) =>
+          task._id === taskId ? { ...task, isCompleted: true } : task,
+        ),
+      };
+    });
+
+    const res = await fetch(
+      `${import.meta.env.VITE_BASE_API_URL}/goal/complete-task/${taskId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getToken("accessToken") as string,
+        },
+      },
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    } else {
+      toast.error(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
+  };
+
+  const handleNextDay = () => {
+    const nextProgress = preProgress + 1;
+
+    navigate(
+      `/dashboard/task/${id}?progress=${nextProgress}&duration=${duration}`,
+    );
+  };
+
+  const allCompleted = dailyTask?.tasks?.every(
+    (task) => task.isCompleted === true,
+  );
 
   return (
     <>
@@ -136,29 +226,77 @@ const DailyTask = () => {
                       {task.description}
                     </p>
                   </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        className="rounded-xl gap-2 cursor-pointer"
+                        variant={task.isCompleted ? "secondary" : "default"}
+                        disabled={task.isCompleted}
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                        {task.isCompleted ? "Completed" : "Complete Task"}
+                      </Button>
+                    </AlertDialogTrigger>
 
-                  <Button
-                    className="rounded-xl gap-2 cursor-pointer"
-                    variant={task.isCompleted ? "secondary" : "default"}
-                  >
-                    <CheckCircle2 className="h-4 w-4" />
-                    {task.isCompleted ? "Completed" : "Complete Task"}
-                  </Button>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Mark this task as completed?
+                        </AlertDialogTitle>
+
+                        <AlertDialogDescription>
+                          Once you complete this task, you can’t undo it. Make
+                          sure you have finished it properly.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                        <AlertDialogAction
+                          onClick={() => handleCompleteTask(task._id)}
+                        >
+                          Yes, Complete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </CardContent>
               </Card>
             ))}
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
-            <Button variant="outline" className="rounded-xl gap-2">
-              <ChevronLeft className="h-4 w-4" />
+            <Button
+              variant="outline"
+              className="rounded-xl gap-2 cursor-pointer"
+              disabled={true}
+            >
+              <ChevronLeft className="h-4 w-4 cursor-pointer" />
               Previous Day
             </Button>
 
-            <Button className="rounded-xl gap-2" onClick={handleNextDay}>
-              Next Day
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+            {preProgress === duration ? (
+              allCompleted && (
+                <Button
+                  className="rounded-xl gap-2 cursor-pointer 
+                            bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 
+                            text-white font-semibold shadow-lg 
+                            hover:scale-105 hover:shadow-2xl 
+                            transition-all duration-300"
+                >
+                  🎯 Challenges Unlocked
+                </Button>
+              )
+            ) : (
+              <Button
+                className="rounded-xl gap-2 cursor-pointer"
+                onClick={handleNextDay}
+              >
+                Next Day
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            )}
           </div>
 
           <div className="rounded-2xl border bg-primary/5 p-5 flex items-center gap-3 text-sm text-muted-foreground">

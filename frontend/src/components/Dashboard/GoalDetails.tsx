@@ -86,7 +86,7 @@ const GoalDetails = () => {
                 className="rounded-xl gap-2 text-base px-6 py-6 cursor-pointer"
                 onClick={() =>
                   navigate(
-                    `/dashboard/task/${goal._id}?progress=${goal.progress}`,
+                    `/dashboard/task/${goal._id}?progress=${goal.progress}&duration=${goal.duration}`,
                   )
                 }
               >
