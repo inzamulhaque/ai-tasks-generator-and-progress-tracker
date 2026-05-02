@@ -228,7 +228,6 @@ export const startAchieveGoalService = async (
         $set: {
           startingDate: new Date(),
           status: "active",
-          progress: 1,
         },
       },
       { session },
@@ -339,21 +338,26 @@ export const nextDayService = async (email: string, goalID: string) => {
 };
 
 export const completedTaskService = async (taskId: string) => {
-  const updatedTask = await DailyTask.findOneAndUpdate(
-    {
-      "tasks._id": taskId,
-    },
-    {
-      $set: {
-        "tasks.$.isCompleted": true,
-      },
-    },
-    {
-      new: true,
-    },
+  const dailyTask = await DailyTask.findOneAndUpdate(
+    { "tasks._id": taskId },
+    { $set: { "tasks.$.isCompleted": true } },
+    { new: true },
+  );
+  if (!dailyTask) {
+    throw new AppError("Task not found!", 404);
+  }
+
+  const allCompleted = dailyTask.tasks.every(
+    (task) => task.isCompleted === true,
   );
 
-  return updatedTask;
+  if (allCompleted) {
+    await Goal.findByIdAndUpdate(dailyTask.goalID, {
+      $inc: { progress: 1 },
+    });
+  }
+
+  return dailyTask;
 };
 
 export const getFinalChallengesService = async (goalID: string) => {
