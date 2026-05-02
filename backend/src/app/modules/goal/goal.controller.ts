@@ -8,6 +8,7 @@ import {
   getFinalChallengesService,
   getGoalByIdService,
   getMyAllGoalsService,
+  getTasksByDayService,
   nextDayService,
   startAchieveGoalService,
 } from "./goal.services";
@@ -138,6 +139,20 @@ export const deleteGoal = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Goal deleted successfully!",
+    data: result,
+  });
+});
+
+export const getTasksByDay = catchAsync(async (req, res) => {
+  const { goalID } = req.params;
+  const { day } = req.query;
+
+  const result = await getTasksByDayService(goalID as string, Number(day));
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Get next day tasks successfully!",
     data: result,
   });
 });

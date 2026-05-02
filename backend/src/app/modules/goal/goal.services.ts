@@ -40,7 +40,8 @@ export const createGoalService = async (
     Return complete JSON in a single response. Do not stream or split.
 
     DO NOT use placeholders like ???
-    All fields must be meaningful
+    All fields must be meaningful.
+    Generate new description.
     `;
 
   const aiResponse = await openAI.chat.completions.create({
@@ -152,7 +153,7 @@ export const getMyAllGoalsService = async (email: string) => {
 
   const allGoals = await Goal.find({
     userID: user._id,
-  });
+  }).sort({ createdAt: -1 });
 
   return allGoals;
 };
@@ -458,4 +459,17 @@ export const deleteGoalService = async (email: string, goalID: string) => {
     console.error(error);
     throw new AppError("Internal server error!", 500);
   }
+};
+
+export const getTasksByDayService = async (goalID: string, day: number) => {
+  const task = await DailyTask.findOne({
+    goalID,
+    day,
+  });
+
+  if (!task) {
+    throw new AppError("Tasks not found!", 404);
+  }
+
+  return task;
 };

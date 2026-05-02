@@ -11,12 +11,13 @@ import { Progress } from "../ui/progress";
 import Header from "./Header";
 import { TDailyTask, TTask } from "../../types/task";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { getToken } from "../../utils/tokenStore";
 
 const DailyTask = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const preProgress = searchParams.get("progress");
   const [dailyTask, setDailyTask] = useState<TDailyTask | null>(null);
@@ -41,11 +42,37 @@ const DailyTask = () => {
         setDailyTask(data?.data);
       })();
     }
+
+    if (Number(preProgress) !== 0) {
+      (async function () {
+        const res = await fetch(
+          `${import.meta.env.VITE_BASE_API_URL}/goal/get-next-day-tasks/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: getToken("accessToken") as string,
+            },
+          },
+        );
+
+        const data = await res.json();
+
+        console.log(data);
+        setDailyTask(data?.data);
+      })();
+    }
   }, [id, preProgress]);
 
   if (!dailyTask) {
     return "Loading...";
   }
+
+  const handleNextDay = () => {
+    const nextProgress = progress + 1;
+
+    navigate(`/dashboard/task/${id}?progress=${nextProgress}`);
+  };
 
   const completedTasks = dailyTask.tasks.filter(
     (task: TTask) => task.isCompleted,
@@ -128,7 +155,7 @@ const DailyTask = () => {
               Previous Day
             </Button>
 
-            <Button className="rounded-xl gap-2">
+            <Button className="rounded-xl gap-2" onClick={handleNextDay}>
               Next Day
               <ChevronRight className="h-4 w-4" />
             </Button>

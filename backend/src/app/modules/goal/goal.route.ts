@@ -10,6 +10,7 @@ import {
   getFinalChallenges,
   getGoalById,
   getMyAllGoals,
+  getTasksByDay,
   nextDay,
   startAchieveGoal,
 } from "./goal.controller";
@@ -38,6 +39,8 @@ router.get("/final-challenges/:goalID", auth, getFinalChallenges);
 router.patch("/complete-challenge/:chngID", auth, completeChallenges);
 
 router.delete("/delete-goal/:goalID", auth, deleteGoal);
+
+router.get("/task/:goalID", auth, getTasksByDay);
 
 const goalRoutes = router;
 export default goalRoutes;
