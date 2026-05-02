@@ -17,8 +17,6 @@ export const validateSigninSchema = z.object({
 
 export const validateChangePasswordSchema = z.object({
   body: z.object({
-    email: z.templateLiteral([z.string().min(1), "@", z.string().max(64)]),
-
     oldPassword: z.string().min(6).max(128),
 
     newPassword: z.string().min(6).max(128),

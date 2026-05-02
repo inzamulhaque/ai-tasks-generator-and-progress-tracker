@@ -152,7 +152,7 @@ export const getTasksByDay = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Get next day tasks successfully!",
+    message: "Get tasks successfully!",
     data: result,
   });
 });

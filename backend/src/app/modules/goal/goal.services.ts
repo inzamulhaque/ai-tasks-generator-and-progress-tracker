@@ -266,15 +266,19 @@ export const nextDayService = async (email: string, goalID: string) => {
   const goal = await Goal.findOne({
     _id: goalID,
     userID: user._id,
-  }).lean();
+  });
 
   if (!goal) {
     throw new AppError("Goal not found!", 404);
   }
 
-  if (!goal.progress || goal.progress < 1 || goal.progress === goal.duration) {
-    throw new AppError("Goal is not active!", 404);
+  if (!goal.progress || goal.progress < 1) {
+    throw new AppError("Previous the task not completed!", 404);
   }
+
+  // if (!goal.progress || goal.progress < 1 || goal.progress === goal.duration) {
+  //   throw new AppError("Previous the task not completed!", 404);
+  // }
 
   const currentDayTasks = await DailyTask.findOne({
     goalID,
@@ -296,45 +300,21 @@ export const nextDayService = async (email: string, goalID: string) => {
   const currentDay = goal.progress || 0;
   const nextDay = currentDay + 1;
 
-  const goalStatus = currentDay == goal.duration ? "close" : goal.status;
+  const nextTasks = await DailyTask.findOne({
+    goalID: goal._id,
+    day: nextDay,
+  });
 
-  const session = await mongoose.startSession();
+  if (!nextTasks) {
+    const currentTask = await DailyTask.findOne({
+      goalID: goal._id,
+      day: currentDay,
+    });
 
-  try {
-    await session.startTransaction();
-
-    await Goal.updateOne(
-      {
-        _id: goalID,
-        userID: user._id,
-      },
-      {
-        $set: {
-          progress: nextDay,
-          status: goalStatus,
-        },
-      },
-      {
-        session,
-      },
-    );
-
-    const nextTasks = await DailyTask.findOne(
-      {
-        goalID: goal._id,
-        day: nextDay,
-      },
-      null,
-      { session },
-    ).lean();
-
-    return nextTasks;
-  } catch (error) {
-    await session.abortTransaction();
-    await session.endSession();
-    console.error(error);
-    throw new AppError("Internal server error!", 500);
+    return currentTask;
   }
+
+  return nextTasks?.toObject();
 };
 
 export const completedTaskService = async (taskId: string) => {

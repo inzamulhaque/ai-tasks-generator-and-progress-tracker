@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 
 import { Button } from "../ui/button";
-import { Sun, Moon, Monitor, Menu } from "lucide-react";
+import { Sun, Moon, Monitor, Menu, LogOut } from "lucide-react";
 
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "../ui/sheet";
 
@@ -12,9 +12,17 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Link } from "react-router";
+import { getToken, removeToken } from "../../utils/tokenStore";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
+
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    setToken(getToken("accessToken") as string);
+  }, []);
 
   return (
     <nav className="w-full border-b bg-background/80 backdrop-blur-md">
@@ -57,17 +65,41 @@ const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Link to="/signin">
-            <Button className="rounded-full px-5 cursor-pointer">
-              Get Started
-            </Button>
-          </Link>
+          {token ? (
+            <>
+              <Link to="/dashboard">
+                <Button className="rounded-full px-5 cursor-pointer">
+                  Dashboard
+                </Button>
+              </Link>
 
-          <Link to="/signup">
-            <Button className="rounded-full px-5 cursor-pointer bg-blue-400">
-              Sign Up
-            </Button>
-          </Link>
+              <Button
+                variant="destructive"
+                className="rounded-xl cursor-pointer gap-2"
+                onClick={() => {
+                  setToken(null);
+                  removeToken("accessToken");
+                }}
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sign Out</span>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/signin">
+                <Button className="rounded-full px-5 cursor-pointer">
+                  Get Started
+                </Button>
+              </Link>
+
+              <Link to="/signup">
+                <Button className="rounded-full px-5 cursor-pointer bg-blue-400">
+                  Sign Up
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* MOBILE MENU */}

@@ -13,6 +13,7 @@ import GoalDetails from "../components/Dashboard/GoalDetails";
 import CreateGoal from "../components/Dashboard/CreateGoal";
 import DailyTask from "../components/Dashboard/DailyTask";
 import Challenges from "../components/Dashboard/Challenges";
+import ChangePassword from "../components/Dashboard/ChangePassword";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,11 @@ const router = createBrowserRouter([
       {
         path: "challenges/:id",
         element: <Challenges />,
+      },
+
+      {
+        path: "profile/change-password",
+        element: <ChangePassword />,
       },
     ],
   },

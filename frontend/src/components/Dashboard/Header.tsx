@@ -1,4 +1,12 @@
-import { LogOut, Monitor, Moon, Sun, UserCircle2 } from "lucide-react";
+import {
+  KeyRound,
+  LogOut,
+  Monitor,
+  Moon,
+  Settings,
+  Sun,
+  UserCircle2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -94,6 +102,23 @@ const Header = () => {
                 <DropdownMenuItem onClick={() => setTheme("system")}>
                   <Monitor className="mr-2 h-4 w-4" />
                   System
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="rounded-xl">
+                  <Settings className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuItem
+                  onClick={() => navigate("/dashboard/profile/change-password")}
+                >
+                  <KeyRound className="mr-2 h-4 w-4" />
+                  Change Password
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

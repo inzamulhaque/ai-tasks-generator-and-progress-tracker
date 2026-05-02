@@ -35,7 +35,13 @@ export const signin = catchAsync(async (req, res) => {
 });
 
 export const changePassword = catchAsync(async (req, res) => {
-  const result = await changePasswordService(req.body);
+  const { email } = req.user!;
+  const { oldPassword, newPassword } = req.body;
+  const result = await changePasswordService({
+    email,
+    oldPassword,
+    newPassword,
+  });
 
   sendResponse(res, {
     statusCode: 200,
