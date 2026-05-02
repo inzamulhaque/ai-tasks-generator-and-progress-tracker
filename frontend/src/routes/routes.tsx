@@ -12,6 +12,7 @@ import DashboardPage from "../components/Dashboard/DashboardPage";
 import GoalDetails from "../components/Dashboard/GoalDetails";
 import CreateGoal from "../components/Dashboard/CreateGoal";
 import DailyTask from "../components/Dashboard/DailyTask";
+import Challenges from "../components/Dashboard/Challenges";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,11 @@ const router = createBrowserRouter([
       {
         path: "task/:id",
         element: <DailyTask />,
+      },
+
+      {
+        path: "challenges/:id",
+        element: <Challenges />,
       },
     ],
   },

@@ -279,6 +279,7 @@ const DailyTask = () => {
             {preProgress === duration ? (
               allCompleted && (
                 <Button
+                  onClick={() => navigate(`/dashboard/challenges/${id}`)}
                   className="rounded-xl gap-2 cursor-pointer 
                             bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 
                             text-white font-semibold shadow-lg 
