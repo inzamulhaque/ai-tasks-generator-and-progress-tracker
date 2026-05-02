@@ -1,7 +1,7 @@
 import { TGoal } from "@/types/goal";
 import { getToken } from "../../utils/tokenStore";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -30,6 +30,7 @@ type TGoalDetails = TGoal & {
 
 const GoalDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [goal, setGoal] = useState<TGoalDetails | null>(null);
 
   useEffect(() => {
@@ -81,7 +82,14 @@ const GoalDetails = () => {
                 </p>
               </div>
 
-              <Button className="rounded-xl gap-2 text-base px-6 py-6 cursor-pointer">
+              <Button
+                className="rounded-xl gap-2 text-base px-6 py-6 cursor-pointer"
+                onClick={() =>
+                  navigate(
+                    `/dashboard/task/${goal._id}?progress=${goal.progress}`,
+                  )
+                }
+              >
                 <PlayCircle className="h-5 w-5" />
                 Start Work
               </Button>

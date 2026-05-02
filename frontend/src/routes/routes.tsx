@@ -11,6 +11,7 @@ import ProtectedRoute from "../components/Dashboard/ProtectedRoute";
 import DashboardPage from "../components/Dashboard/DashboardPage";
 import GoalDetails from "../components/Dashboard/GoalDetails";
 import CreateGoal from "../components/Dashboard/CreateGoal";
+import DailyTask from "../components/Dashboard/DailyTask";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,11 @@ const router = createBrowserRouter([
       {
         path: "create-goal",
         element: <CreateGoal />,
+      },
+
+      {
+        path: "task/:id",
+        element: <DailyTask />,
       },
     ],
   },

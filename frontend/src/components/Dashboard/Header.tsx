@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { TProfile } from "../../types/profile";
 import { useTheme } from "next-themes";
 import { getToken, removeToken } from "../../utils/tokenStore";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -49,13 +49,17 @@ const Header = () => {
               <UserCircle2 className="h-7 w-7" />
             </div>
 
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold tracking-tight">
-                Welcome back, {profile?.name} 👋
-              </h1>
+            <Link to={"/dashboard"}>
+              <div>
+                <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+                  Welcome back, {profile?.name} 👋
+                </h1>
 
-              <p className="text-sm text-muted-foreground">{profile?.email}</p>
-            </div>
+                <p className="text-sm text-muted-foreground">
+                  {profile?.email}
+                </p>
+              </div>
+            </Link>
           </div>
 
           <div className="flex items-center gap-3">
