@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
-import { Link, useNavigate, useSearchParams } from "react-router";
+
+import { useNavigate, useSearchParams } from "react-router";
 
 import { Button } from "../ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
@@ -78,6 +78,24 @@ const OtpVerifyPage = () => {
     }
   };
 
+  const handleResetOtp = async () => {
+    const res = await fetch(
+      `${import.meta.env.VITE_BASE_API_URL}/auth/resend-otp`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          email,
+        }),
+      },
+    );
+
+    const data = await res.json();
+  };
+
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
@@ -133,6 +151,7 @@ const OtpVerifyPage = () => {
         <p className="mt-6 text-sm text-muted-foreground">
           Didn’t receive code?{" "}
           <button
+            onClick={handleResetOtp}
             disabled={timeLeft > 0}
             className={`font-medium hover:underline cursor-pointer ${
               timeLeft > 0 ? "text-gray-400 cursor-not-allowed" : "text-primary"

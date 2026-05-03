@@ -298,6 +298,14 @@ export const resendOtpService = async (email: string) => {
       { session },
     );
 
+    const emailHTML = emailTemplate({
+      title: "OTP Resent Successfully",
+      message: "Use the OTP below to continue verifying your account:",
+      otp: newOtp,
+    });
+
+    await sendEmail(email, "Your New OTP Code", emailHTML);
+
     await session.commitTransaction();
     await session.endSession();
 
