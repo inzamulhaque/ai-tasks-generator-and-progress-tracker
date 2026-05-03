@@ -79,6 +79,7 @@ const OtpVerifyPage = () => {
   };
 
   const handleResetOtp = async () => {
+    setLoading(true);
     const res = await fetch(
       `${import.meta.env.VITE_BASE_API_URL}/auth/resend-otp`,
       {
@@ -94,7 +95,31 @@ const OtpVerifyPage = () => {
     );
 
     const data = await res.json();
+
+    setLoading(false);
+
+    if (data?.success) {
+      toast.success(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    } else {
+      toast.error(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
   };
+
+  if (loading) {
+    return "Loading...";
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
