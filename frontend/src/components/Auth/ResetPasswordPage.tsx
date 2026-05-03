@@ -1,13 +1,91 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { toast } from "sonner";
 
 const ResetPasswordPage = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const token = searchParams.get("token");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+
+    if (!password || !confirmPassword) {
+      setError("Password and Confirm Password are required");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+
+    const res = await fetch(
+      `${import.meta.env.VITE_BASE_API_URL}/auth/reset-password`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token as string,
+        },
+
+        body: JSON.stringify({
+          password,
+        }),
+      },
+    );
+
+    const data = await res.json();
+
+    setLoading(false);
+
+    if (data?.success) {
+      navigate(`/signin`);
+
+      toast.success(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    } else {
+      toast.error(data.message, {
+        position: "top-right",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
+  };
+
+  if (loading) {
+    return "Loading...";
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
@@ -32,7 +110,7 @@ const ResetPasswordPage = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
             <label className="text-sm font-medium mb-2 block">
               New Password
@@ -43,6 +121,7 @@ const ResetPasswordPage = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter new password"
                 className="h-12 rounded-xl pr-12"
+                name="password"
               />
 
               <button
@@ -69,6 +148,7 @@ const ResetPasswordPage = () => {
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm new password"
                 className="h-12 rounded-xl pr-12"
+                name="confirmPassword"
               />
 
               <button
@@ -92,6 +172,8 @@ const ResetPasswordPage = () => {
             Reset Password
           </Button>
         </form>
+
+        {error && <p className="my-2 text-sm text-red-500">{error}</p>}
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Remember your password?{" "}

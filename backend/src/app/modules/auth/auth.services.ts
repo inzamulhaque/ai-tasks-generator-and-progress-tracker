@@ -222,6 +222,7 @@ export const resetPasswordService = async (email: string, password: string) => {
       {
         $set: {
           password: hashedNewPassword,
+          status: "active",
         },
       },
       { session },
