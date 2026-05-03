@@ -4,6 +4,7 @@ import {
   changePasswordService,
   forgotPasswordService,
   getMeService,
+  resendOtpService,
   resetPasswordService,
   signinWithEmailService,
   signinWithGoogleService,
@@ -106,6 +107,18 @@ export const signinWithGoogle = catchAsync(async (req, res) => {
     statusCode: 200,
     success: true,
     message: "Signin with google successfully!",
+    data: result,
+  });
+});
+
+export const resendOtp = catchAsync(async (req, res) => {
+  const { email } = req.body;
+  const result = await resendOtpService(email);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Resent OTP successfully!",
     data: result,
   });
 });

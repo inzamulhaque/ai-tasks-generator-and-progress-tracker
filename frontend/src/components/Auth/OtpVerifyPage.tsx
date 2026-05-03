@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 
 import { Button } from "../ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
+import { toast } from "sonner";
 
 const OtpVerifyPage = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const [timeLeft, setTimeLeft] = useState(300);
+  const [timeLeft, setTimeLeft] = useState<number>(300);
+
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const from = searchParams.get("from");
+  const email = searchParams.get("email");
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -26,19 +34,54 @@ const OtpVerifyPage = () => {
     return `${min}:${sec < 10 ? "0" : ""}${sec}`;
   };
 
+  const handleSubmit = async () => {
+    if (from === "signup") {
+      setLoading(true);
+      const res = await fetch(
+        `${import.meta.env.VITE_BASE_API_URL}/auth/email-verify`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            email,
+            otp: Number(value),
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      setLoading(false);
+
+      if (data?.success) {
+        navigate(`/signin`);
+
+        toast.success(data.message, {
+          position: "top-right",
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        });
+      } else {
+        toast.error(data.message, {
+          position: "top-right",
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        });
+      }
+    }
+  };
+
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-20 left-1/2 -translate-x-1/2 h-[400px] w-[400px] rounded-full bg-primary/20 blur-[120px]" />
-      </div>
-
-      <div className="absolute top-6 left-6">
-        <Link to="/forgot-password">
-          <Button variant="ghost" className="gap-2 rounded-full">
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-        </Link>
       </div>
 
       <div className="w-full max-w-md rounded-3xl border bg-background/80 backdrop-blur-xl shadow-2xl p-8 text-center">
@@ -79,7 +122,11 @@ const OtpVerifyPage = () => {
           </InputOTP>
         </div>
 
-        <Button className="w-full h-12 rounded-xl mt-8 text-base font-semibold cursor-pointer">
+        <Button
+          onClick={handleSubmit}
+          className="w-full h-12 rounded-xl mt-8 text-base font-semibold cursor-pointer"
+          disabled={value.length !== 5}
+        >
           Verify OTP
         </Button>
 

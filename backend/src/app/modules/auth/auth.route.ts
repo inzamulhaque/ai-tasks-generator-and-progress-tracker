@@ -13,6 +13,7 @@ import {
   changePassword,
   forgotPassword,
   getMe,
+  resendOtp,
   resetPassword,
   signin,
   signinWithGoogle,
@@ -65,6 +66,8 @@ router.post(
   validateRequest(validateSigninWithGoogleSchema),
   signinWithGoogle,
 );
+
+router.post("/resend-otp", resendOtp);
 
 const AuthRouters = router;
 

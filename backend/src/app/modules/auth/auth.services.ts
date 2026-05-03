@@ -265,3 +265,47 @@ export const signinWithGoogleService = async (user: {
   const token = jwtUtils.generateToken({ email: user.email });
   return { token };
 };
+
+export const resendOtpService = async (email: string) => {
+  const user = await User.findOne({
+    email,
+  });
+  if (!user) {
+    throw new AppError("User not found!", 404);
+  }
+  const newOtp = await generateOtp();
+
+  const session = await mongoose.startSession();
+
+  try {
+    await session.startTransaction();
+
+    await Otp.deleteOne(
+      {
+        email,
+      },
+      { session },
+    );
+
+    await Otp.create(
+      [
+        {
+          email,
+          otp: newOtp,
+          otpFor: "resend-otp",
+        },
+      ],
+      { session },
+    );
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return { message: "A new OTP has been sent!" };
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    console.error(error);
+    throw new AppError("Failed to process resend OTP request!", 500);
+  }
+};
