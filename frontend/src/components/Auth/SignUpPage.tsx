@@ -4,6 +4,7 @@ import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Link } from "react-router";
+import GoogleSignIn from "./GoogleSignIn";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -107,19 +108,14 @@ const SignUpPage = () => {
           >
             Sign Up
           </Button>
-
-          <div className="relative text-center text-sm text-muted-foreground">
-            <div className="absolute inset-0 top-1/2 border-t" />
-            <span className="relative bg-background px-3">or</span>
-          </div>
-
-          <Button
-            variant="outline"
-            className="w-full h-12 rounded-xl text-base font-medium cursor-pointer"
-          >
-            Continue with Google
-          </Button>
         </form>
+
+        <div className="relative text-center text-sm text-muted-foreground my-5">
+          <div className="absolute inset-0 top-1/2 border-t" />
+          <span className="relative bg-background px-3">or</span>
+        </div>
+
+        <GoogleSignIn />
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}

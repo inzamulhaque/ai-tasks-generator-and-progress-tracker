@@ -254,12 +254,12 @@ export const signinWithGoogleService = async (user: {
   name: string;
   email: string;
 }) => {
-  const result = await User.find({
+  const result = await User.findOne({
     email: user.email,
   });
 
   if (!result) {
-    await User.create(user);
+    await User.create({ ...user, status: "active" });
   }
 
   const token = jwtUtils.generateToken({ email: user.email });

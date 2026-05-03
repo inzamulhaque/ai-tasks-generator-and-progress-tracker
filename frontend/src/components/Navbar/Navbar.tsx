@@ -13,16 +13,15 @@ import {
 } from "../ui/dropdown-menu";
 import { Link } from "react-router";
 import { getToken, removeToken } from "../../utils/tokenStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
 
-  const [token, setToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    setToken(getToken("accessToken") as string);
-  }, []);
+  const [token, setToken] = useState<string | null>(() => {
+    const accessToken = getToken("accessToken");
+    return accessToken || null;
+  });
 
   return (
     <nav className="w-full border-b bg-background/80 backdrop-blur-md">
