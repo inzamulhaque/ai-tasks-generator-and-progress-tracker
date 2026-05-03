@@ -76,6 +76,48 @@ const OtpVerifyPage = () => {
         });
       }
     }
+
+    if (from === "forgot") {
+      setLoading(true);
+      const res = await fetch(
+        `${import.meta.env.VITE_BASE_API_URL}/auth/verify-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            email,
+            otp: Number(value),
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      setLoading(false);
+
+      if (data?.success) {
+        navigate(`/reset-password?token=${data?.data}`);
+
+        toast.success(data.message, {
+          position: "top-right",
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        });
+      } else {
+        toast.error(data.message, {
+          position: "top-right",
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        });
+      }
+    }
   };
 
   const handleResetOtp = async () => {
